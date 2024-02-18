@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CSignalPaint.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Kursach.h" />
     <ClInclude Include="KursachDlg.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CSignalPaint.cpp" />
     <ClCompile Include="Kursach.cpp" />
     <ClCompile Include="KursachDlg.cpp" />
     <ClCompile Include="Lib.cpp" />

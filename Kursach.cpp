@@ -36,6 +36,13 @@ CKursachApp::CKursachApp()
 CKursachApp theApp;
 
 
+int G_N;
+int G_F;
+int G_Fm;
+int G_M;
+double G_SignalGraph_XScale;
+int G_SignalGraph_YScale;
+
 // Инициализация CKursachApp
 
 BOOL CKursachApp::InitInstance()

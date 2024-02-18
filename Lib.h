@@ -7,6 +7,7 @@
 #include "KursachDlg.h"
 #include <vector>
 
+
 // Вещественные декартовы координаты
 typedef struct dXY {
 	double x;
@@ -52,11 +53,11 @@ public:
 class Lib_GraphConverter : Lib_PointCalculation {
 public:
 	// Генерация точки для рисования графика (начало координат по центру)
-	CPoint GenerateDrawablePoint(CRect& rc, dXY &calculatedPoint, int xScale = 1, int yScale = 1);
+	CPoint GenerateDrawablePoint(CRect& rc, dXY &calculatedPoint);
 
 	// Смещение графика в начало координат (центр области рисования)
-	dXY GraphShift(CRect &rc, dXY &calculatedPoint, int xScale=1, int yScale=1);
+	dXY GraphShift(CRect &rc, dXY &calculatedPoint);
 
 	// Генерация точек графика сигнала
-	void GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec, int xScale = 1, int yScale = 1);
+	void GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec);
 };

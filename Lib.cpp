@@ -63,9 +63,10 @@ void Lib_InteractiveBoxesData::CheckIntNumber(int& number, int smallest, int lar
 
 dXY Lib_PointCalculation::SignalCalculation(double& x)
 {
-
 	//Собственно посчитанная координата y
-	double y = sin(2 * M_PI * F * x + M * sin(2 * M_PI * Fm * x));
+	double y = sin(2 * M_PI * G_F * x + G_M * sin(2 * M_PI * G_Fm * x));
+
+	//double y = sin(x);
 
 	// Запись ответа
 	dXY ans;
@@ -75,24 +76,28 @@ dXY Lib_PointCalculation::SignalCalculation(double& x)
 	return ans;
 }
 
-CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint, int xScale, int yScale)
+CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint)
 {
+	dXY g;
+	g.x = calculatedPoint.x *G_SignalGraph_XScale;
+	g.y = calculatedPoint.y *G_SignalGraph_YScale;
+
 	dXY ShiftedGraph;
-	ShiftedGraph = GraphShift(rc, calculatedPoint, xScale, yScale);
+	ShiftedGraph = GraphShift(rc, g);
 
 	CPoint ans;
-	ans.y = ShiftedGraph.y * yScale;
-	ans.x = ShiftedGraph.x * xScale;
-	return CPoint();
+	ans.y = ShiftedGraph.y;
+	ans.x = ShiftedGraph.x;
+	return ans;
 }
 
-dXY Lib_GraphConverter::GraphShift(CRect& rc, dXY& calculatedPoint, int xScale, int yScale)
+dXY Lib_GraphConverter::GraphShift(CRect& rc, dXY& calculatedPoint)
 {
 	int x0 = rc.Width() / 2;
 	int y0 = rc.Height() / 2;
 
-	double x = x0 + calculatedPoint.x * xScale;
-	double y = y0 - calculatedPoint.y * yScale;
+	double x = x0 + calculatedPoint.x * G_SignalGraph_XScale;
+	double y = y0 - calculatedPoint.y * G_SignalGraph_YScale;
 
 	dXY ans;
 	ans.x = x;
@@ -101,14 +106,14 @@ dXY Lib_GraphConverter::GraphShift(CRect& rc, dXY& calculatedPoint, int xScale, 
 	return ans;
 }
 
-void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec, int xScale, int yScale)
+void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec)
 {
-	for (int i = 1; i <= rc.Width(); i++) {
+	for (int i = -(rc.Width()); i <= rc.Width(); i++) {
 
-		double x = i / xScale;
+		double x = double(i) * G_SignalGraph_XScale;
 		dXY calc = SignalCalculation(x);
 
-		CPoint point = GenerateDrawablePoint(rc, calc, xScale, yScale);
+		CPoint point = GenerateDrawablePoint(rc, calc);
 		
 		vec.push_back(point);
 	}

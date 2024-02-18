@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "CSignalPaint.h"
 
 // Диалоговое окно CKursachDlg
 class CKursachDlg : public CDialogEx
@@ -82,4 +83,5 @@ public:
 	// Переменная масштаба графика сигнала по X
 	int SignalGraph_XScale;
 	afx_msg void OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pResult);
+	CSignalPaint Graph_signal;
 };

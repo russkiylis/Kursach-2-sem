@@ -33,3 +33,10 @@ public:
 };
 
 extern CKursachApp theApp;
+
+extern int G_N;
+extern int G_F;
+extern int G_Fm;
+extern int G_M;
+extern double G_SignalGraph_XScale;
+extern int G_SignalGraph_YScale;
