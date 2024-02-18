@@ -90,7 +90,7 @@ BOOL CKursachApp::InitInstance()
 		TRACE(traceAppMsg, 0, "Предупреждение. При использовании элементов управления MFC для диалогового окна невозможно #define _AFX_NO_MFC_CONTROLS_IN_DIALOGS.\n");
 	}
 
-	// Удалить диспетчер оболочки, созданный выше.
+	 //Удалить диспетчер оболочки, созданный выше.
 	if (pShellManager != nullptr)
 	{
 		delete pShellManager;

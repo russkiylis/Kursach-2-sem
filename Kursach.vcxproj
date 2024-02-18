@@ -186,6 +186,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Kursach.h" />
     <ClInclude Include="KursachDlg.h" />
+    <ClInclude Include="Lib.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -193,6 +194,7 @@
   <ItemGroup>
     <ClCompile Include="Kursach.cpp" />
     <ClCompile Include="KursachDlg.cpp" />
+    <ClCompile Include="Lib.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -204,6 +206,7 @@
     <ResourceCompile Include="Kursach.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="res\Kursach.rc2" />
   </ItemGroup>
   <ItemGroup>
