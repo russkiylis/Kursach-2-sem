@@ -84,4 +84,5 @@ public:
 	int SignalGraph_XScale;
 	afx_msg void OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pResult);
 	CSignalPaint Graph_signal;
+//	afx_msg void OnEnChangeNEdit();
 };

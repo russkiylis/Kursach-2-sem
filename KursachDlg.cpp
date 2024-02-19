@@ -165,15 +165,15 @@ BOOL CKursachDlg::OnInitDialog()
 	SignalGraph_YControl.SetPos(10000);
 
 	// Ползунок графика сигнала по X
-	SignalGraph_XScale = 1;
-	SignalGraph_XControl.SetRange(1, 10);
-	SignalGraph_XControl.SetPos(1);
+	SignalGraph_XScale = 100;
+	SignalGraph_XControl.SetRange(50, 500);
+	SignalGraph_XControl.SetPos(100);
 
 	G_N = N;
 	G_F = F;
 	G_Fm = Fm;
 	G_M = M;
-	G_SignalGraph_XScale = SignalGraph_XScale;
+	G_SignalGraph_XScale = double(SignalGraph_XScale) / 100;
 	G_SignalGraph_YScale=SignalGraph_YScale;
 
 
@@ -246,7 +246,7 @@ void CKursachDlg::OnBnClickedOk()
 	G_F = F;
 	G_Fm = Fm;
 	G_M = M;
-	G_SignalGraph_XScale = SignalGraph_XScale;
+	G_SignalGraph_XScale = double(SignalGraph_XScale)/100;
 	G_SignalGraph_YScale = SignalGraph_YScale;
 
 	Graph_signal.Invalidate();
@@ -262,6 +262,8 @@ void CKursachDlg::OnEnKillfocusNEdit()
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
 	G_N = N;
+	Graph_signal.Invalidate();
+
 }
 
 // Что происходит когда нажимаются кнопочки N
@@ -272,6 +274,7 @@ void CKursachDlg::OnDeltaposNSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	data.IntSpinChange(N, 100, 1000, N_Edit, pNMUpDown->iDelta);  // Изменение N
 	G_N = N;
+	Graph_signal.Invalidate();
 	*pResult = 0;
 }
 
@@ -287,6 +290,7 @@ void CKursachDlg::OnEnKillfocusFEdit()
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(F, 1000000, 4000000, F_Edit);  // Возвращение F в нормальные значения, если нужно
 	G_F = F;
+	Graph_signal.Invalidate();
 }
 
 // Что происходит когда нажимаются кнопочки F
@@ -297,6 +301,7 @@ void CKursachDlg::OnDeltaposFSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	data.IntSpinChange(F, 1000000, 4000000, F_Edit, pNMUpDown->iDelta, 5000);  // Изменение F
 	G_F = F;
+	Graph_signal.Invalidate();
 	*pResult = 0;
 }
 
@@ -312,6 +317,7 @@ void CKursachDlg::OnEnKillfocusFmEdit()
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
 	G_Fm = Fm;
+	Graph_signal.Invalidate();
 }
 
 // Что происходит когда нажимаются кнопочки Fm
@@ -322,6 +328,7 @@ void CKursachDlg::OnDeltaposFmSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	data.IntSpinChange(Fm, 100000, 900000, Fm_Edit, pNMUpDown->iDelta, 1000);  // Изменение Fm
 	G_Fm = Fm;
+	Graph_signal.Invalidate();
 	*pResult = 0;
 }
 
@@ -337,6 +344,7 @@ void CKursachDlg::OnEnKillfocusMEdit()
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
 	G_M = M;
+	Graph_signal.Invalidate();
 }
 
 // Что происходит когда нажимаются кнопочки M
@@ -347,6 +355,7 @@ void CKursachDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	data.IntSpinChange(M, 0, 10, M_Edit, pNMUpDown->iDelta);  // Изменение M
 	G_M = M;
+	Graph_signal.Invalidate();
 	*pResult = 0;
 }
 
@@ -369,7 +378,7 @@ void CKursachDlg::OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pRes
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	// TODO: добавьте свой код обработчика уведомлений
 	UpdateData();
-	G_SignalGraph_XScale = SignalGraph_XScale;
+	G_SignalGraph_XScale = double(SignalGraph_XScale) / 100;
 	Graph_signal.Invalidate();
 }
 

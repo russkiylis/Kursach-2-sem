@@ -65,6 +65,7 @@ dXY Lib_PointCalculation::SignalCalculation(double& x)
 {
 	//Собственно посчитанная координата y
 	double y = sin(2 * M_PI * G_F * x * G_SignalGraph_XScale + G_M * sin(2 * M_PI * G_Fm * x * G_SignalGraph_XScale));
+	//double y = cos(x*G_SignalGraph_XScale) * sin(x*G_SignalGraph_XScale);
 
 	// Запись ответа
 	dXY ans;
@@ -76,12 +77,9 @@ dXY Lib_PointCalculation::SignalCalculation(double& x)
 
 CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint)
 {
-	dXY g;
-	g.x = calculatedPoint.x /**G_SignalGraph_XScale*/;
-	g.y = calculatedPoint.y /**G_SignalGraph_YScale;*/;
 
 	dXY ShiftedGraph;
-	ShiftedGraph = GraphShift(rc, g);
+	ShiftedGraph = GraphShift(rc, calculatedPoint);
 
 	CPoint ans;
 	ans.y = ShiftedGraph.y;
@@ -106,7 +104,7 @@ dXY Lib_GraphConverter::GraphShift(CRect& rc, dXY& calculatedPoint)
 
 void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec)
 {
-	for (int i = -(rc.Width()* G_SignalGraph_XScale); i <= rc.Width()* G_SignalGraph_XScale; i++) {
+	for (int i = -(rc.Width()); i <= rc.Width(); i++) {
 
 		double x = double(i) / G_SignalGraph_XScale;
 		dXY calc = SignalCalculation(x);
@@ -115,4 +113,5 @@ void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint
 		
 		vec.push_back(point);
 	}
+	TRACE("%d \n", vec.size());
 }
