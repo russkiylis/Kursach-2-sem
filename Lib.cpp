@@ -64,13 +64,13 @@ void Lib_InteractiveBoxesData::CheckIntNumber(int& number, int smallest, int lar
 dXY Lib_PointCalculation::SignalCalculation(double& x)
 {
 	//Собственно посчитанная координата y
-	double y = sin(2 * M_PI * G_F * x * G_SignalGraph_XScale + G_M * sin(2 * M_PI * G_Fm * x * G_SignalGraph_XScale));
+	double y = sin(2 * M_PI * G_F * x + G_M * sin(2 * M_PI * G_Fm * x));
 	//double y = cos(x*G_SignalGraph_XScale) * sin(x*G_SignalGraph_XScale);
 
 	// Запись ответа
 	dXY ans;
-	ans.x = x*G_SignalGraph_XScale;
-	ans.y = y*G_SignalGraph_YScale;
+	ans.x = x;
+	ans.y = y;
 
 	return ans;
 }
@@ -92,8 +92,8 @@ dXY Lib_GraphConverter::GraphShift(CRect& rc, dXY& calculatedPoint)
 	int x0 = rc.Width() / 2;
 	int y0 = rc.Height() / 2;
 
-	double x = x0 + calculatedPoint.x * G_SignalGraph_XScale;
-	double y = y0 - calculatedPoint.y * G_SignalGraph_YScale;
+	double x = x0 + calculatedPoint.x*G_SignalGraph_XScale;
+	double y = y0 - calculatedPoint.y*G_SignalGraph_YScale;
 
 	dXY ans;
 	ans.x = x;
@@ -106,7 +106,7 @@ void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint
 {
 	for (int i = -(rc.Width()); i <= rc.Width(); i++) {
 
-		double x = double(i) / G_SignalGraph_XScale;
+		double x = double(i) /10000000;
 		dXY calc = SignalCalculation(x);
 
 		CPoint point = GenerateDrawablePoint(rc, calc);

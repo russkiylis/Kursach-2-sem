@@ -160,20 +160,20 @@ BOOL CKursachDlg::OnInitDialog()
 	M_Edit.SetWindowTextW(L"5");
 
 	// Ползунок графика сигнала по Y
-	SignalGraph_YScale = 10000;
-	SignalGraph_YControl.SetRange(5000, 15000);
-	SignalGraph_YControl.SetPos(10000);
+	SignalGraph_YScale = 100;
+	SignalGraph_YControl.SetRange(20, 200);
+	SignalGraph_YControl.SetPos(100);
 
 	// Ползунок графика сигнала по X
-	SignalGraph_XScale = 100;
-	SignalGraph_XControl.SetRange(50, 500);
-	SignalGraph_XControl.SetPos(100);
+	SignalGraph_XScale = 10000000;
+	SignalGraph_XControl.SetRange(50000000, 500000000);
+	SignalGraph_XControl.SetPos(10000000);
 
 	G_N = N;
 	G_F = F;
 	G_Fm = Fm;
 	G_M = M;
-	G_SignalGraph_XScale = double(SignalGraph_XScale) / 100;
+	G_SignalGraph_XScale = double(SignalGraph_XScale);
 	G_SignalGraph_YScale=SignalGraph_YScale;
 
 
@@ -246,7 +246,7 @@ void CKursachDlg::OnBnClickedOk()
 	G_F = F;
 	G_Fm = Fm;
 	G_M = M;
-	G_SignalGraph_XScale = double(SignalGraph_XScale)/100;
+	G_SignalGraph_XScale = double(SignalGraph_XScale);
 	G_SignalGraph_YScale = SignalGraph_YScale;
 
 	Graph_signal.Invalidate();
@@ -378,7 +378,7 @@ void CKursachDlg::OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pRes
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	// TODO: добавьте свой код обработчика уведомлений
 	UpdateData();
-	G_SignalGraph_XScale = double(SignalGraph_XScale) / 100;
+	G_SignalGraph_XScale = double(SignalGraph_XScale);
 	Graph_signal.Invalidate();
 }
 
