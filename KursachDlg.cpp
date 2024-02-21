@@ -136,10 +136,6 @@ BOOL CKursachDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Мелкий значок
 
 
-
-
-	// TODO: добавьте дополнительную инициализацию
-
 	// Связь стрелочек выбора и окошек выбора
 	N_Spin.SetBuddy(&N_Edit);
 	F_Spin.SetBuddy(&F_Edit);
@@ -160,15 +156,16 @@ BOOL CKursachDlg::OnInitDialog()
 	M_Edit.SetWindowTextW(L"5");
 
 	// Ползунок графика сигнала по Y
-	SignalGraph_YScale = 100;
-	SignalGraph_YControl.SetRange(20, 200);
-	SignalGraph_YControl.SetPos(100);
+	SignalGraph_YScale = 50;
+	SignalGraph_YControl.SetRange(20, 100);
+	SignalGraph_YControl.SetPos(50);
 
 	// Ползунок графика сигнала по X
-	SignalGraph_XScale = 10000000;
-	SignalGraph_XControl.SetRange(50000000, 500000000);
-	SignalGraph_XControl.SetPos(10000000);
+	SignalGraph_XScale = 30000000;
+	SignalGraph_XControl.SetRange(20000000, 100000000);
+	SignalGraph_XControl.SetPos(30000000);
 
+	// Передача значений в глобальны переменные
 	G_N = N;
 	G_F = F;
 	G_Fm = Fm;
@@ -176,9 +173,10 @@ BOOL CKursachDlg::OnInitDialog()
 	G_SignalGraph_XScale = double(SignalGraph_XScale);
 	G_SignalGraph_YScale=SignalGraph_YScale;
 
-
 	// Назначение окошка для рисования
 	Graph_signal.SubclassDlgItem(ID_SIGNALGRAPH_WINDOW, this);
+
+
 
 	return TRUE;  // возврат значения TRUE, если фокус не передан элементу управления
 }
@@ -242,6 +240,7 @@ void CKursachDlg::OnBnClickedOk()
 	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
 	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
 
+	// Передача данных в глобальные значения
 	G_N = N;
 	G_F = F;
 	G_Fm = Fm;
@@ -249,6 +248,7 @@ void CKursachDlg::OnBnClickedOk()
 	G_SignalGraph_XScale = double(SignalGraph_XScale);
 	G_SignalGraph_YScale = SignalGraph_YScale;
 
+	// Инвалидация окошек с графиком (перерисовывание)
 	Graph_signal.Invalidate();
 }
 
@@ -261,8 +261,8 @@ void CKursachDlg::OnEnKillfocusNEdit()
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
-	G_N = N;
-	Graph_signal.Invalidate();
+	G_N = N;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
 
 }
 
@@ -273,8 +273,9 @@ void CKursachDlg::OnDeltaposNSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(N, 100, 1000, N_Edit, pNMUpDown->iDelta);  // Изменение N
-	G_N = N;
-	Graph_signal.Invalidate();
+	G_N = N;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+
 	*pResult = 0;
 }
 
@@ -289,8 +290,8 @@ void CKursachDlg::OnEnKillfocusFEdit()
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(F, 1000000, 4000000, F_Edit);  // Возвращение F в нормальные значения, если нужно
-	G_F = F;
-	Graph_signal.Invalidate();
+	G_F = F;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
 }
 
 // Что происходит когда нажимаются кнопочки F
@@ -300,8 +301,9 @@ void CKursachDlg::OnDeltaposFSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(F, 1000000, 4000000, F_Edit, pNMUpDown->iDelta, 5000);  // Изменение F
-	G_F = F;
-	Graph_signal.Invalidate();
+	G_F = F;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+
 	*pResult = 0;
 }
 
@@ -316,8 +318,8 @@ void CKursachDlg::OnEnKillfocusFmEdit()
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
-	G_Fm = Fm;
-	Graph_signal.Invalidate();
+	G_Fm = Fm;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
 }
 
 // Что происходит когда нажимаются кнопочки Fm
@@ -327,8 +329,9 @@ void CKursachDlg::OnDeltaposFmSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(Fm, 100000, 900000, Fm_Edit, pNMUpDown->iDelta, 1000);  // Изменение Fm
-	G_Fm = Fm;
-	Graph_signal.Invalidate();
+	G_Fm = Fm;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+
 	*pResult = 0;
 }
 
@@ -343,8 +346,8 @@ void CKursachDlg::OnEnKillfocusMEdit()
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
-	G_M = M;
-	Graph_signal.Invalidate();
+	G_M = M;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
 }
 
 // Что происходит когда нажимаются кнопочки M
@@ -354,8 +357,9 @@ void CKursachDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(M, 0, 10, M_Edit, pNMUpDown->iDelta);  // Изменение M
-	G_M = M;
-	Graph_signal.Invalidate();
+	G_M = M;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+
 	*pResult = 0;
 }
 
@@ -366,20 +370,21 @@ void CKursachDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 void CKursachDlg::OnNMCustomdrawSignalgraphYcontrol(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	// TODO: добавьте свой код обработчика уведомлений
-	UpdateData();
-	G_SignalGraph_YScale = SignalGraph_YScale;
-	Graph_signal.Invalidate();
+
+	UpdateData();  // Обновление информации
+	G_SignalGraph_YScale = SignalGraph_YScale;  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+
 	*pResult = 0;
 }
 
 void CKursachDlg::OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	// TODO: добавьте свой код обработчика уведомлений
-	UpdateData();
-	G_SignalGraph_XScale = double(SignalGraph_XScale);
-	Graph_signal.Invalidate();
+
+	UpdateData();  // Обновление информации
+	G_SignalGraph_XScale = double(SignalGraph_XScale);  // Передача в глобальное значение
+	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
 }
 
 #pragma endregion

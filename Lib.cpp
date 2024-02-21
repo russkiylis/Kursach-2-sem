@@ -8,7 +8,7 @@
 CString Lib_Converter::floatToCString_2(float& number)
 {
 	CString str;
-	str.Format(_T("%.2f"), number);
+	str.Format(_T("%.2f"), number);  // Собственно конвертация
 
 	return str;
 }
@@ -16,23 +16,23 @@ CString Lib_Converter::floatToCString_2(float& number)
 CString Lib_Converter::intToCString(int& number)
 {
 	CString str;
-	str.Format(_T("%d"), number);
+	str.Format(_T("%d"), number);  // Собственно конвертация
 
 	return str;
 }
 
 void Lib_InteractiveBoxesData::IntSpinChange(int& number, int smallest, int largest, CEdit& editBox, int &delta)
 {
-	number -= delta;
+	number -= delta;  // Изменение номера в соотвествии с размером дельты (шага изменения)
 
-	if (number < smallest) {
+	if (number < smallest) {  // Если число меньше самого маленького доступного, то число становится самым маленьким доступным
 		number = smallest;
 	}
-	else if (number > largest) {
+	else if (number > largest) {  // Если число больше самого большого доступного, то число становится самым большим доступным
 		number = largest;
 	}
 
-	editBox.SetWindowTextW(intToCString(number));
+	editBox.SetWindowTextW(intToCString(number));  // Задание нового значения в editBox
 }
 
 void Lib_InteractiveBoxesData::IntSpinChange(int& number, int smallest, int largest, CEdit& editBox, int& delta, int multiplier)
@@ -78,24 +78,13 @@ dXY Lib_PointCalculation::SignalCalculation(double& x)
 CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint)
 {
 
-	dXY ShiftedGraph;
-	ShiftedGraph = GraphShift(rc, calculatedPoint);
-
-	CPoint ans;
-	ans.y = ShiftedGraph.y;
-	ans.x = ShiftedGraph.x;
-	return ans;
-}
-
-dXY Lib_GraphConverter::GraphShift(CRect& rc, dXY& calculatedPoint)
-{
 	int x0 = rc.Width() / 2;
 	int y0 = rc.Height() / 2;
 
-	double x = x0 + calculatedPoint.x*G_SignalGraph_XScale;
-	double y = y0 - calculatedPoint.y*G_SignalGraph_YScale;
+	double x = x0 + calculatedPoint.x * G_SignalGraph_XScale;
+	double y = y0 - calculatedPoint.y * G_SignalGraph_YScale;
 
-	dXY ans;
+	CPoint ans;
 	ans.x = x;
 	ans.y = y;
 
@@ -104,7 +93,7 @@ dXY Lib_GraphConverter::GraphShift(CRect& rc, dXY& calculatedPoint)
 
 void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec)
 {
-	for (int i = -(rc.Width()); i <= rc.Width(); i++) {
+	for (int i = -(rc.Width())/G_SignalGraph_XScale* 10000000; i <= rc.Width()/G_SignalGraph_XScale* 10000000; i++) {
 
 		double x = double(i) /10000000;
 		dXY calc = SignalCalculation(x);
@@ -113,5 +102,5 @@ void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint
 		
 		vec.push_back(point);
 	}
-	TRACE("%d \n", vec.size());
+	TRACE("Количество точек: %d \n", vec.size());
 }

@@ -43,11 +43,13 @@ public:
 	void CheckIntNumber(int& number, int smallest, int largest, CEdit& editBox);
 };
 
-class Lib_PointCalculation : CKursachDlg{
+class Lib_PointCalculation {
 public:
 	// Подсчёт непреобразованной для вывода точки графика сигнала
 	dXY SignalCalculation(double &x);
 
+	// Подсчёт графика ДПФ
+	dXY DPFCalculation(double& N);
 };
 
 class Lib_GraphConverter : Lib_PointCalculation {
@@ -55,9 +57,9 @@ public:
 	// Генерация точки для рисования графика (начало координат по центру)
 	CPoint GenerateDrawablePoint(CRect& rc, dXY &calculatedPoint);
 
-	// Смещение графика в начало координат (центр области рисования)
-	dXY GraphShift(CRect &rc, dXY &calculatedPoint);
-
 	// Генерация точек графика сигнала
 	void GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec);
+
+	// Генерация точек графика ДПФ
+	void GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& vec);
 };

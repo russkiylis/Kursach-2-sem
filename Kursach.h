@@ -34,9 +34,20 @@ public:
 
 extern CKursachApp theApp;
 
+// Глобальная переменная N (Количество отсчётов сигнала)
 extern int G_N;
+// Глобальная переменная F (Несущая частота сигнала)
 extern int G_F;
+// Глобальная переменная Fm (Частота модуляции)
 extern int G_Fm;
+// Глобальная переменная M (Глубина модуляции)
 extern int G_M;
+// Глобальная переменная масштаба графика сигнала по Х
 extern double G_SignalGraph_XScale;
+// Глобальная переменная масштаба графика сигнала по Y
+extern int G_SignalGraph_YScale;
+
+// Глобальная переменная масштаба графика ДПФ по Х
+extern double G_DPFGraph_XScale;
+// Глобальная переменная масштаба графика ДПФ по Y
 extern int G_SignalGraph_YScale;

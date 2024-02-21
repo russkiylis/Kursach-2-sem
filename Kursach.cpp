@@ -35,6 +35,7 @@ CKursachApp::CKursachApp()
 
 CKursachApp theApp;
 
+// Объявление глобальных переменных
 
 int G_N;
 int G_F;
@@ -42,6 +43,9 @@ int G_Fm;
 int G_M;
 double G_SignalGraph_XScale;
 int G_SignalGraph_YScale;
+
+double G_DPFGraph_XScale;
+int G_DPFGraph_YScale;
 
 // Инициализация CKursachApp
 
