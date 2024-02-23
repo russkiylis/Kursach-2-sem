@@ -27,7 +27,6 @@
 #define ID_Fm_SPIN                      1017
 #define ID_M_SPIN                       1018
 #define ID_SIGNALGRAPH_WINDOW           1019
-#define ID_DPFGRAPH                     1020
 #define ID_DPFGRAPH_WINDOW              1020
 
 // Next default values for new objects

@@ -1,9 +1,8 @@
-﻿
-// KursachDlg.h: файл заголовка
+﻿// KursachDlg.h: файл заголовка
 //
 
 #pragma once
-#include "CSignalPaint.h"
+#include "GraphPaint.h"
 
 // Диалоговое окно CKursachDlg
 class CKursachDlg : public CDialogEx
@@ -73,16 +72,37 @@ public:
 
 	afx_msg void OnEnKillfocusMEdit();
 	afx_msg void OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult);
+
 	// Масштаб по Y графика сигнала
 	int SignalGraph_YScale;
 	afx_msg void OnNMCustomdrawSignalgraphYcontrol(NMHDR* pNMHDR, LRESULT* pResult);
+
 	// Переменная управления ползунком масшаба OY графика сигнала
 	CSliderCtrl SignalGraph_YControl;
 	// Переменная ползунка масштаба OX графика сигнала
 	CSliderCtrl SignalGraph_XControl;
+
 	// Переменная масштаба графика сигнала по X
 	int SignalGraph_XScale;
 	afx_msg void OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pResult);
-	CSignalPaint Graph_signal;
-//	afx_msg void OnEnChangeNEdit();
+
+	// Переменная рисования графика сигнала
+	CSignalPaint Graph_Signal;
+	// Переменная управления ползунка Y графика ДПФ
+	CSliderCtrl DPFGraph_YControl;
+	// Переменная масштаба графика ДПФ по Y
+	int DPFGraph_YScale;
+	// Переменная управления ползунка Х графика ДПФ
+	CSliderCtrl DPFGraph_XControl;
+	// Переменная масштаба Х графика ДПФ
+	int DPFGraph_XScale;
+	// Управление галочкой логарифмирования Y графика ДПФ
+	CButton DPFGraph_LogControl;
+	// Переменная логарифмирования Y графика ДПФ
+	BOOL DPFGraph_IsLog;
+	afx_msg void OnNMCustomdrawDpfgraphYcontrol2(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMCustomdrawDpfgraphXcontrol2(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedDpfgraphLogbutton();
+	// Переменная рисования ДПФ
+	CDPFPaint DPF_Signal;
 };

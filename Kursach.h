@@ -50,4 +50,6 @@ extern int G_SignalGraph_YScale;
 // Глобальная переменная масштаба графика ДПФ по Х
 extern double G_DPFGraph_XScale;
 // Глобальная переменная масштаба графика ДПФ по Y
-extern int G_SignalGraph_YScale;
+extern int G_DPFGraph_YScale;
+// Глобальная переменная логарифмирования графика ДПФ по Y
+extern bool G_DPFGraph_IsLog;

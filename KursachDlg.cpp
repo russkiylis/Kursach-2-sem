@@ -55,6 +55,9 @@ CKursachDlg::CKursachDlg(CWnd* pParent /*=nullptr*/)
 	, M(5)
 	, SignalGraph_YScale(50000)
 	, SignalGraph_XScale(5)
+	, DPFGraph_YScale(0)
+	, DPFGraph_XScale(0)
+	, DPFGraph_IsLog(FALSE)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -83,6 +86,12 @@ void CKursachDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, ID_SIGNALGRAPH_YCONTROL, SignalGraph_YControl);
 	DDX_Control(pDX, ID_SIGNALGRAPH_XCONTROL, SignalGraph_XControl);
 	DDX_Slider(pDX, ID_SIGNALGRAPH_XCONTROL, SignalGraph_XScale);
+	DDX_Control(pDX, ID_DPFGRAPH_YCONTROL2, DPFGraph_YControl);
+	DDX_Slider(pDX, ID_DPFGRAPH_YCONTROL2, DPFGraph_YScale);
+	DDX_Control(pDX, ID_DPFGRAPH_XCONTROL2, DPFGraph_XControl);
+	DDX_Slider(pDX, ID_DPFGRAPH_XCONTROL2, DPFGraph_XScale);
+	DDX_Control(pDX, ID_DPFGRAPH_LOGBUTTON, DPFGraph_LogControl);
+	DDX_Check(pDX, ID_DPFGRAPH_LOGBUTTON, DPFGraph_IsLog);
 }
 
 // Подключение обработчиков событий
@@ -101,6 +110,9 @@ BEGIN_MESSAGE_MAP(CKursachDlg, CDialogEx)
 	ON_NOTIFY(UDN_DELTAPOS, ID_M_SPIN, &CKursachDlg::OnDeltaposMSpin)
 	ON_NOTIFY(NM_CUSTOMDRAW, ID_SIGNALGRAPH_YCONTROL, &CKursachDlg::OnNMCustomdrawSignalgraphYcontrol)
 	ON_NOTIFY(NM_CUSTOMDRAW, ID_SIGNALGRAPH_XCONTROL, &CKursachDlg::OnNMCustomdrawSignalgraphXcontrol)
+	ON_NOTIFY(NM_CUSTOMDRAW, ID_DPFGRAPH_YCONTROL2, &CKursachDlg::OnNMCustomdrawDpfgraphYcontrol2)
+	ON_NOTIFY(NM_CUSTOMDRAW, ID_DPFGRAPH_XCONTROL2, &CKursachDlg::OnNMCustomdrawDpfgraphXcontrol2)
+	ON_BN_CLICKED(ID_DPFGRAPH_LOGBUTTON, &CKursachDlg::OnBnClickedDpfgraphLogbutton)
 END_MESSAGE_MAP()
 
 
@@ -174,8 +186,8 @@ BOOL CKursachDlg::OnInitDialog()
 	G_SignalGraph_YScale=SignalGraph_YScale;
 
 	// Назначение окошка для рисования
-	Graph_signal.SubclassDlgItem(ID_SIGNALGRAPH_WINDOW, this);
-
+	Graph_Signal.SubclassDlgItem(ID_SIGNALGRAPH_WINDOW, this);
+	DPF_Signal.SubclassDlgItem(ID_DPFGRAPH_WINDOW, this);
 
 
 	return TRUE;  // возврат значения TRUE, если фокус не передан элементу управления
@@ -249,7 +261,7 @@ void CKursachDlg::OnBnClickedOk()
 	G_SignalGraph_YScale = SignalGraph_YScale;
 
 	// Инвалидация окошек с графиком (перерисовывание)
-	Graph_signal.Invalidate();
+	Graph_Signal.Invalidate();
 }
 
 #pragma region Обработка ввода N
@@ -262,8 +274,8 @@ void CKursachDlg::OnEnKillfocusNEdit()
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
 	G_N = N;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
-
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 // Что происходит когда нажимаются кнопочки N
@@ -274,7 +286,8 @@ void CKursachDlg::OnDeltaposNSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	data.IntSpinChange(N, 100, 1000, N_Edit, pNMUpDown->iDelta);  // Изменение N
 	G_N = N;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
 }
@@ -291,7 +304,8 @@ void CKursachDlg::OnEnKillfocusFEdit()
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(F, 1000000, 4000000, F_Edit);  // Возвращение F в нормальные значения, если нужно
 	G_F = F;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 // Что происходит когда нажимаются кнопочки F
@@ -302,7 +316,8 @@ void CKursachDlg::OnDeltaposFSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	data.IntSpinChange(F, 1000000, 4000000, F_Edit, pNMUpDown->iDelta, 5000);  // Изменение F
 	G_F = F;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
 }
@@ -319,7 +334,8 @@ void CKursachDlg::OnEnKillfocusFmEdit()
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
 	G_Fm = Fm;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 // Что происходит когда нажимаются кнопочки Fm
@@ -330,7 +346,8 @@ void CKursachDlg::OnDeltaposFmSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	data.IntSpinChange(Fm, 100000, 900000, Fm_Edit, pNMUpDown->iDelta, 1000);  // Изменение Fm
 	G_Fm = Fm;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
 }
@@ -347,7 +364,8 @@ void CKursachDlg::OnEnKillfocusMEdit()
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
 	G_M = M;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 // Что происходит когда нажимаются кнопочки M
@@ -358,7 +376,8 @@ void CKursachDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	data.IntSpinChange(M, 0, 10, M_Edit, pNMUpDown->iDelta);  // Изменение M
 	G_M = M;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
 }
@@ -367,24 +386,64 @@ void CKursachDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 #pragma region Обработка масштаба графика сигнала
 
+// Что происходит когда двигают ползунок Y
 void CKursachDlg::OnNMCustomdrawSignalgraphYcontrol(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
 	G_SignalGraph_YScale = SignalGraph_YScale;  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 
 	*pResult = 0;
 }
 
+// Что происходит когда двигают ползунок X
 void CKursachDlg::OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
 	G_SignalGraph_XScale = double(SignalGraph_XScale);  // Передача в глобальное значение
-	Graph_signal.Invalidate();  // Перерисовывание графика сигнала
+	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+
+	*pResult = 0;
+}
+
+#pragma endregion
+
+#pragma region Обработка масштаба графика ДПФ
+
+// Что происходит когда двигают ползунок Y
+void CKursachDlg::OnNMCustomdrawDpfgraphYcontrol2(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+
+	UpdateData();  // Обновление информации
+	G_DPFGraph_YScale = double(DPFGraph_YScale);  // Передача в глобальное значение
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+
+	*pResult = 0;
+}
+
+// Что происходит когда двигают ползунок X
+void CKursachDlg::OnNMCustomdrawDpfgraphXcontrol2(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+
+	UpdateData();  // Обновление информации
+	G_DPFGraph_XScale = double(DPFGraph_XScale);  // Передача в глобальное значение
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+
+	*pResult = 0;
+}
+
+// Что происходит когда нажимают на галочку логарифмирования
+void CKursachDlg::OnBnClickedDpfgraphLogbutton()
+{
+	UpdateData();  // Обновление информации
+	G_DPFGraph_IsLog=DPFGraph_IsLog;  // Передача в глобальное значение
+	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 #pragma endregion

@@ -43,6 +43,7 @@ public:
 	void CheckIntNumber(int& number, int smallest, int largest, CEdit& editBox);
 };
 
+// Класс вычислений точек графиков
 class Lib_PointCalculation {
 public:
 	// Подсчёт непреобразованной для вывода точки графика сигнала
@@ -52,6 +53,7 @@ public:
 	dXY DPFCalculation(double& N);
 };
 
+// Класс генерации точек графиков
 class Lib_GraphConverter : Lib_PointCalculation {
 public:
 	// Генерация точки для рисования графика (начало координат по центру)

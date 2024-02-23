@@ -1,7 +1,8 @@
 #include "pch.h"
-#include "CSignalPaint.h"
+#include "GraphPaint.h"
 #include "Lib.h"
 
+// Обработчик событий CSignalPaint
 BEGIN_MESSAGE_MAP(CSignalPaint, CStatic)
 	ON_WM_PAINT()
 END_MESSAGE_MAP()
@@ -9,10 +10,8 @@ END_MESSAGE_MAP()
 
 void CSignalPaint::OnPaint()
 {
-	CPaintDC dc(this);
-	Lib_GraphConverter converter;
-	CKursachDlg dlg;
-
+	CPaintDC dc(this);  // Device context. Нужно для рисование
+	Lib_GraphConverter converter;  // Класс конвертации
 
 	GetClientRect(&rc);
 
@@ -32,4 +31,17 @@ void CSignalPaint::OnPaint()
 		dc.LineTo(points[i]);
 	}
 
+}
+
+// Обработчик событий CDPFPaint
+BEGIN_MESSAGE_MAP(CDPFPaint, CStatic)
+ON_WM_PAINT()
+END_MESSAGE_MAP()
+
+
+void CDPFPaint::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO: добавьте свой код обработчика сообщений
+	// Не вызывать CStatic::OnPaint() для сообщений рисования
 }

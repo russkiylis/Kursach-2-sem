@@ -46,6 +46,7 @@ int G_SignalGraph_YScale;
 
 double G_DPFGraph_XScale;
 int G_DPFGraph_YScale;
+bool G_DPFGraph_IsLog;
 
 // Инициализация CKursachApp
 
