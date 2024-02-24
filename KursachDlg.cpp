@@ -177,13 +177,31 @@ BOOL CKursachDlg::OnInitDialog()
 	SignalGraph_XControl.SetRange(20000000, 100000000);
 	SignalGraph_XControl.SetPos(30000000);
 
-	// Передача значений в глобальны переменные
-	G_N = N;
-	G_F = F;
-	G_Fm = Fm;
-	G_M = M;
-	G_SignalGraph_XScale = double(SignalGraph_XScale);
-	G_SignalGraph_YScale=SignalGraph_YScale;
+	// Ползунок графика ДПФ по Y
+	DPFGraph_YScale = 50;
+	DPFGraph_YControl.SetRange(1, 100);
+	DPFGraph_YControl.SetPos(50);
+
+	// Ползунок графика ДПФ по X
+	DPFGraph_XScale = 30000000;
+	DPFGraph_XControl.SetRange(20000000, 100000000);
+	DPFGraph_XControl.SetPos(30000000);
+
+	// Передача в класс построения графика сигнала
+	Graph_Signal.N = N;
+	Graph_Signal.F = F;
+	Graph_Signal.Fm = Fm;
+	Graph_Signal.M = M;
+	Graph_Signal.XScale = SignalGraph_XScale;
+	Graph_Signal.YScale = SignalGraph_YScale;
+
+	// Передача в класс построения графика ДПФ
+	DPF_Signal.N = N;
+	DPF_Signal.F = F;
+	DPF_Signal.Fm = Fm;
+	DPF_Signal.M = M;
+	DPF_Signal.XScale = DPFGraph_XScale;
+	DPF_Signal.YScale = DPFGraph_YScale;
 
 	// Назначение окошка для рисования
 	Graph_Signal.SubclassDlgItem(ID_SIGNALGRAPH_WINDOW, this);
@@ -252,16 +270,25 @@ void CKursachDlg::OnBnClickedOk()
 	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
 	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
 
-	// Передача данных в глобальные значения
-	G_N = N;
-	G_F = F;
-	G_Fm = Fm;
-	G_M = M;
-	G_SignalGraph_XScale = double(SignalGraph_XScale);
-	G_SignalGraph_YScale = SignalGraph_YScale;
+	// Передача в класс построения графика сигнала
+	Graph_Signal.N = N;
+	Graph_Signal.F = F;
+	Graph_Signal.Fm = Fm;
+	Graph_Signal.M = M;
+	Graph_Signal.XScale = SignalGraph_XScale;
+	Graph_Signal.YScale = SignalGraph_YScale;
+
+	// Передача в класс построения графика ДПФ
+	DPF_Signal.N = N;
+	DPF_Signal.F = F;
+	DPF_Signal.Fm = Fm;
+	DPF_Signal.M = M;
+	DPF_Signal.XScale = DPFGraph_XScale;
+	DPF_Signal.YScale = DPFGraph_YScale;
 
 	// Инвалидация окошек с графиком (перерисовывание)
 	Graph_Signal.Invalidate();
+	DPF_Signal.Invalidate();
 }
 
 #pragma region Обработка ввода N
@@ -273,7 +300,10 @@ void CKursachDlg::OnEnKillfocusNEdit()
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
-	G_N = N;  // Передача в глобальное значение
+
+	Graph_Signal.N = N;  // Передача в класс построения графика сигнала
+	DPF_Signal.N = N;  // Передача в класс построения графика ДПФ
+
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
@@ -285,7 +315,10 @@ void CKursachDlg::OnDeltaposNSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(N, 100, 1000, N_Edit, pNMUpDown->iDelta);  // Изменение N
-	G_N = N;  // Передача в глобальное значение
+
+	Graph_Signal.N = N;  // Передача в класс построения графика сигнала
+	DPF_Signal.N = N;  // Передача в класс построения графика ДПФ
+
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
@@ -303,7 +336,10 @@ void CKursachDlg::OnEnKillfocusFEdit()
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(F, 1000000, 4000000, F_Edit);  // Возвращение F в нормальные значения, если нужно
-	G_F = F;  // Передача в глобальное значение
+
+	Graph_Signal.F = F;  // Передача в класс построения графика сигнала
+	DPF_Signal.F = F;  // Передача в класс построения графика ДПФ
+
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
@@ -315,7 +351,10 @@ void CKursachDlg::OnDeltaposFSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(F, 1000000, 4000000, F_Edit, pNMUpDown->iDelta, 5000);  // Изменение F
-	G_F = F;  // Передача в глобальное значение
+
+	Graph_Signal.F = F;  // Передача в класс построения графика сигнала
+	DPF_Signal.F = F;  // Передача в класс построения графика ДПФ
+
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
@@ -333,7 +372,10 @@ void CKursachDlg::OnEnKillfocusFmEdit()
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
-	G_Fm = Fm;  // Передача в глобальное значение
+
+	Graph_Signal.Fm = Fm;  // Передача в класс построения графика сигнала
+	DPF_Signal.Fm = Fm;  // Передача в класс построения графика ДПФ
+
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
@@ -345,7 +387,10 @@ void CKursachDlg::OnDeltaposFmSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(Fm, 100000, 900000, Fm_Edit, pNMUpDown->iDelta, 1000);  // Изменение Fm
-	G_Fm = Fm;  // Передача в глобальное значение
+
+	Graph_Signal.Fm = Fm;  // Передача в класс построения графика сигнала
+	DPF_Signal.Fm = Fm;  // Передача в класс построения графика ДПФ
+
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
@@ -363,7 +408,10 @@ void CKursachDlg::OnEnKillfocusMEdit()
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
-	G_M = M;  // Передача в глобальное значение
+
+	Graph_Signal.M = M;  // Передача в класс построения графика сигнала
+	DPF_Signal.M = M;  // Передача в класс построения графика ДПФ
+
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
@@ -375,7 +423,10 @@ void CKursachDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(M, 0, 10, M_Edit, pNMUpDown->iDelta);  // Изменение M
-	G_M = M;  // Передача в глобальное значение
+
+	Graph_Signal.M = M;  // Передача в класс построения графика сигнала
+	DPF_Signal.M = M;  // Передача в класс построения графика ДПФ
+
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
@@ -392,7 +443,7 @@ void CKursachDlg::OnNMCustomdrawSignalgraphYcontrol(NMHDR* pNMHDR, LRESULT* pRes
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
-	G_SignalGraph_YScale = SignalGraph_YScale;  // Передача в глобальное значение
+	Graph_Signal.YScale = SignalGraph_YScale;  // Передача в класс
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 
 	*pResult = 0;
@@ -404,7 +455,7 @@ void CKursachDlg::OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pRes
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
-	G_SignalGraph_XScale = double(SignalGraph_XScale);  // Передача в глобальное значение
+	Graph_Signal.XScale = SignalGraph_XScale;  // Передача в класс
 	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
 
 	*pResult = 0;
@@ -420,7 +471,7 @@ void CKursachDlg::OnNMCustomdrawDpfgraphYcontrol2(NMHDR* pNMHDR, LRESULT* pResul
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
-	G_DPFGraph_YScale = double(DPFGraph_YScale);  // Передача в глобальное значение
+	DPF_Signal.YScale = DPFGraph_YScale;  // Передача в класс
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
@@ -432,7 +483,7 @@ void CKursachDlg::OnNMCustomdrawDpfgraphXcontrol2(NMHDR* pNMHDR, LRESULT* pResul
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
-	G_DPFGraph_XScale = double(DPFGraph_XScale);  // Передача в глобальное значение
+	DPF_Signal.XScale = DPFGraph_XScale;  // Передача в класс
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
@@ -442,7 +493,7 @@ void CKursachDlg::OnNMCustomdrawDpfgraphXcontrol2(NMHDR* pNMHDR, LRESULT* pResul
 void CKursachDlg::OnBnClickedDpfgraphLogbutton()
 {
 	UpdateData();  // Обновление информации
-	G_DPFGraph_IsLog=DPFGraph_IsLog;  // Передача в глобальное значение
+	DPF_Signal.IsLog=DPFGraph_IsLog;  // Передача в глобальное значение
 	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
 }
 

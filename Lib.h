@@ -49,19 +49,28 @@ public:
 	// Подсчёт непреобразованной для вывода точки графика сигнала
 	dXY SignalCalculation(double &x);
 
-	// Подсчёт графика ДПФ
-	dXY DPFCalculation(double& N);
+	// Переменные
+
+	int N;
+	int F;
+	int Fm;
+	int M;
 };
 
 // Класс генерации точек графиков
-class Lib_GraphConverter : Lib_PointCalculation {
+class Lib_GraphConverter : public Lib_PointCalculation {
 public:
 	// Генерация точки для рисования графика (начало координат по центру)
-	CPoint GenerateDrawablePoint(CRect& rc, dXY &calculatedPoint);
+	CPoint GenerateDrawablePoint(CRect& rc, dXY &calculatedPoint, int x0, int y0);
 
 	// Генерация точек графика сигнала
 	void GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec);
 
 	// Генерация точек графика ДПФ
 	void GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& vec);
+
+	// Переменные
+
+	int XScale;
+	int YScale;
 };
