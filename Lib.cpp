@@ -91,12 +91,12 @@ CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint
 void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec)
 {
 	// Подсчёт точек
-	for (int i = -N/2; i < N/2; i++) {
+	for (int i = 0; i < N; i++) {
 
 		double x = double(i) /10000000;  // Целочисленное значение i делится на 10^7 так как по условию частота подсчёта графика 10 МГц
 		dXY calc = SignalCalculation(x);  // Считаем точку
 
-		CPoint point = GenerateDrawablePoint(rc, calc, rc.Width() / 2, rc.Height() / 2);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
+		CPoint point = GenerateDrawablePoint(rc, calc, 0, rc.Height() / 2);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
 		
 		vec.push_back(point);  // Засовываем точку в вектор точек
 	}
@@ -109,7 +109,7 @@ void Lib_GraphConverter::GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& 
 
 
 	// Подсчёт точек
-	for (int i = -N / 2; i < N / 2; i++) {
+	for (int i = 0; i < N; i++) {
 
 		dXY DPFCalc;
 		double sum = 0;
@@ -127,7 +127,7 @@ void Lib_GraphConverter::GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& 
 		DPFCalc.x = double(i)/10000000;
 		DPFCalc.y = sqrt(pow(cos_sum,2)+pow(sin_sum,2));
 
-		CPoint point = GenerateDrawablePoint(rc, DPFCalc, rc.Width() / 2, rc.Height()-1);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
+		CPoint point = GenerateDrawablePoint(rc, DPFCalc, 0, rc.Height()-1);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
 
 		vec.push_back(point);  // Засовываем точку в вектор точек
 	}
