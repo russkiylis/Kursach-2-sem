@@ -105,4 +105,6 @@ public:
 	afx_msg void OnBnClickedDpfgraphLogbutton();
 	// Переменная рисования ДПФ
 	CDPFPaint DPF_Signal;
+	afx_msg void OnBnClickedSignalgraphBmpbutton();
+	afx_msg void OnBnClickedDpfgraphBmpbutton();
 };

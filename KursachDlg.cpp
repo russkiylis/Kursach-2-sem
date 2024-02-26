@@ -8,6 +8,10 @@
 #include "Kursach.h"
 #include "KursachDlg.h"
 
+#include <initguid.h>
+DEFINE_GUID(ImageFormatBMP, 0xb96b3cab, 0x0728, 0x11d3, 0x9d, 0x7b,
+	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -113,6 +117,8 @@ BEGIN_MESSAGE_MAP(CKursachDlg, CDialogEx)
 	ON_NOTIFY(NM_CUSTOMDRAW, ID_DPFGRAPH_YCONTROL2, &CKursachDlg::OnNMCustomdrawDpfgraphYcontrol2)
 	ON_NOTIFY(NM_CUSTOMDRAW, ID_DPFGRAPH_XCONTROL2, &CKursachDlg::OnNMCustomdrawDpfgraphXcontrol2)
 	ON_BN_CLICKED(ID_DPFGRAPH_LOGBUTTON, &CKursachDlg::OnBnClickedDpfgraphLogbutton)
+	ON_BN_CLICKED(ID_SIGNALGRAPH_BMPBUTTON, &CKursachDlg::OnBnClickedSignalgraphBmpbutton)
+	ON_BN_CLICKED(ID_DPFGRAPH_BMPBUTTON, &CKursachDlg::OnBnClickedDpfgraphBmpbutton)
 END_MESSAGE_MAP()
 
 
@@ -178,9 +184,9 @@ BOOL CKursachDlg::OnInitDialog()
 	SignalGraph_XControl.SetPos(30000000);
 
 	// Ползунок графика ДПФ по Y
-	DPFGraph_YScale = 50;
+	DPFGraph_YScale = 5;
 	DPFGraph_YControl.SetRange(1, 100);
-	DPFGraph_YControl.SetPos(50);
+	DPFGraph_YControl.SetPos(5);
 
 	// Ползунок графика ДПФ по X
 	DPFGraph_XScale = 30000000;
@@ -498,3 +504,104 @@ void CKursachDlg::OnBnClickedDpfgraphLogbutton()
 }
 
 #pragma endregion
+
+void CKursachDlg::OnBnClickedSignalgraphBmpbutton()
+{
+	CWnd* pWnd = GetDlgItem(ID_SIGNALGRAPH_WINDOW);
+
+	if (!pWnd)
+		return;
+
+	CWindowDC winDC(pWnd);
+
+	CRect rc;
+	pWnd->GetClientRect(&rc);
+
+	CDC memDC;
+	memDC.CreateCompatibleDC(&winDC);
+
+	CBitmap bitMap;
+	bitMap.CreateCompatibleBitmap(&winDC, rc.Width(), rc.Height());
+
+	HGDIOBJ pOld = memDC.SelectObject(&bitMap);
+	memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &winDC, 0, 0, SRCCOPY);
+	memDC.SelectObject(pOld);
+
+	static TCHAR szFilter[] = _T("BMP Files (*.bmp)|*.bmp|")
+		_T("PNG Files (*.png)|*.png|GIF Files (*.gif)|*.gif|")
+		_T("JPG Files (*.jpg)|*.jpg|All Files (*.*)|*.*||");
+	CFileDialog dlg(FALSE, _T(".bmp"), NULL, 6UL, szFilter);
+	if (IDOK == dlg.DoModal())
+	{
+		CImage image;
+		image.Attach(HBITMAP(bitMap));
+		CString strFull = dlg.GetOFN().lpstrFile;
+		HRESULT hr;
+
+		if (-1 != strFull.Find(_T(".bmp")))
+			hr = image.Save(strFull, ImageFormatBMP);
+		else
+		{
+			strFull += _T(".bmp");
+			hr = image.Save(strFull, ImageFormatBMP);
+		}
+		if (FAILED(hr))
+		{
+			CString strErr;
+				strErr.Format(L" Couldn't Save File: %s, %x ", (LPCTSTR)strFull,
+					hr);
+			AfxMessageBox(strErr, MB_OK | MB_ICONERROR);
+		}
+	}
+}
+
+
+
+void CKursachDlg::OnBnClickedDpfgraphBmpbutton()
+{
+	CWnd* pWnd = GetDlgItem(ID_DPFGRAPH_WINDOW);
+
+	if (!pWnd)
+		return;
+
+	CWindowDC winDC(pWnd);
+
+	CRect rc;
+	pWnd->GetClientRect(&rc);
+
+	CDC memDC;
+	memDC.CreateCompatibleDC(&winDC);
+
+	CBitmap bitMap;
+	bitMap.CreateCompatibleBitmap(&winDC, rc.Width(), rc.Height());
+
+	HGDIOBJ pOld = memDC.SelectObject(&bitMap);
+	memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &winDC, 0, 0, SRCCOPY);
+	memDC.SelectObject(pOld);
+
+	static TCHAR szFilter[] = _T("BMP Files (*.bmp)|*.bmp|");
+
+	CFileDialog dlg(FALSE, _T(".bmp"), NULL, 6UL, szFilter);
+	if (IDOK == dlg.DoModal())
+	{
+		CImage image;
+		image.Attach(HBITMAP(bitMap));
+		CString strFull = dlg.GetOFN().lpstrFile;
+		HRESULT hr;
+
+		if (-1 != strFull.Find(_T(".bmp")))
+			hr = image.Save(strFull, ImageFormatBMP);
+		else
+		{
+			strFull += _T(".bmp");
+			hr = image.Save(strFull, ImageFormatBMP);
+		}
+		if (FAILED(hr))
+		{
+			CString strErr;
+			strErr.Format(L" Couldn't Save File: %s, %x ", (LPCTSTR)strFull,
+				hr);
+			AfxMessageBox(strErr, MB_OK | MB_ICONERROR);
+		}
+	}
+}

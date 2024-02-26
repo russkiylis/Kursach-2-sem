@@ -74,11 +74,20 @@ dXY Lib_PointCalculation::SignalCalculation(double& x)
 	return ans;
 }
 
-CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint, int x0, int y0)
+CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint, int x0, int y0, bool isLog)
 {
 
 	double x = x0 + calculatedPoint.x * XScale;  // Перемещение х графика в центр + масштабирование
-	double y = y0 - calculatedPoint.y * YScale;  // Перемещение y графика в центр + масштабирование
+	double y;
+
+	if (isLog) {
+		y = y0 - log10(calculatedPoint.y) * YScale;  // Перемещение y графика в центр + масштабирование (логарифм)
+		if (y>259) y -= (y - 260);
+	}
+	else {
+		y = y0 - calculatedPoint.y * YScale;  // Перемещение y графика в центр + масштабирование
+	}
+
 
 	// Запись ответа
 	CPoint ans;
@@ -105,29 +114,25 @@ void Lib_GraphConverter::GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint
 
 void Lib_GraphConverter::GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& vec)
 {
-	double sum = 0;  // Сумма значений N подсчётов графика сигнала
-
-
 	// Подсчёт точек
 	for (int i = 0; i < N; i++) {
 
 		dXY DPFCalc;
-		double sum = 0;
 		double sin_sum = 0, cos_sum = 0;
 
 		for (int g = 0; g < N; g++) {
 			double x = double(g) / 10000000;  // Целочисленное значение i делится на 10^7 так как по условию частота подсчёта графика 10 МГц
 			dXY calc = SignalCalculation(x);  // Считаем точку
 
-			sin_sum += calc.y * sin((-2 * M_PI * i * g) /N);
-			cos_sum += calc.y * cos((-2 * M_PI * i * g) / N);
+			sin_sum += calc.y * sin((-2 * M_PI * i * g) /N);  // Подсчёт синусной составляющей Хк
+			cos_sum += calc.y * cos((-2 * M_PI * i * g) / N);  // Подсчёт косинусной составляющей Хк
 
 		}
 
-		DPFCalc.x = double(i)/10000000;
-		DPFCalc.y = sqrt(pow(cos_sum,2)+pow(sin_sum,2));
+		DPFCalc.x = double(i)/10000000;  // Посчитанная точка х
+		DPFCalc.y = sqrt(pow(cos_sum,2)+pow(sin_sum,2));  // Посчитанная точка у (корень из суммы квадратов синусной и косинусной составляющей)
 
-		CPoint point = GenerateDrawablePoint(rc, DPFCalc, 0, rc.Height()-1);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
+		CPoint point = GenerateDrawablePoint(rc, DPFCalc, 0, rc.Height()-1, isLog);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
 
 		vec.push_back(point);  // Засовываем точку в вектор точек
 	}

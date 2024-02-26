@@ -69,6 +69,7 @@ void CDPFPaint::OnPaint()
 	converter.M = M;
 	converter.XScale = XScale;
 	converter.YScale = YScale;
+	converter.isLog = IsLog;
 
 	// Получить прямоугольник окошка
 	GetClientRect(&rc);

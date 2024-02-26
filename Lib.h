@@ -61,7 +61,7 @@ public:
 class Lib_GraphConverter : public Lib_PointCalculation {
 public:
 	// Генерация точки для рисования графика (начало координат по центру)
-	CPoint GenerateDrawablePoint(CRect& rc, dXY &calculatedPoint, int x0, int y0);
+	CPoint GenerateDrawablePoint(CRect& rc, dXY &calculatedPoint, int x0, int y0, bool isLog=false);
 
 	// Генерация точек графика сигнала
 	void GenerateSignalGraphPoints(CRect& rc, std::vector<CPoint>& vec);
@@ -73,4 +73,5 @@ public:
 
 	int XScale;
 	int YScale;
+	bool isLog;
 };
