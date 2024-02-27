@@ -84,8 +84,8 @@ CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint
 	double y;
 
 	if (isLog) {
-		y = y0 - log10(calculatedPoint.y) * YScale;  // Перемещение y графика в центр + масштабирование (логарифм)
-		if (y>259) y -= (y - 260);
+		y = y0-log10(calculatedPoint.y) * YScale*10;  // Перемещение y графика в центр + масштабирование (логарифм)
+		if (y>rc.Height()) y -= (y - rc.Height());
 	}
 	else {
 		y = y0 - calculatedPoint.y * YScale;  // Перемещение y графика в центр + масштабирование
