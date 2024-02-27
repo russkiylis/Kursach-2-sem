@@ -174,9 +174,9 @@ BOOL CKursachDlg::OnInitDialog()
 	M_Edit.SetWindowTextW(L"5");
 
 	// Ползунок графика сигнала по Y
-	SignalGraph_YScale = 50;
-	SignalGraph_YControl.SetRange(20, 100);
-	SignalGraph_YControl.SetPos(50);
+	SignalGraph_YScale = 1500;
+	SignalGraph_YControl.SetRange(600, 3000);
+	SignalGraph_YControl.SetPos(1500);
 
 	// Ползунок графика сигнала по X
 	SignalGraph_XScale = 300;
@@ -184,9 +184,9 @@ BOOL CKursachDlg::OnInitDialog()
 	SignalGraph_XControl.SetPos(300);
 
 	// Ползунок графика ДПФ по Y
-	DPFGraph_YScale = 5;
-	DPFGraph_YControl.SetRange(1, 10);
-	DPFGraph_YControl.SetPos(5);
+	DPFGraph_YScale = 50;
+	DPFGraph_YControl.SetRange(10, 100);
+	DPFGraph_YControl.SetPos(50);
 
 	// Ползунок графика ДПФ по X
 	DPFGraph_XScale = 300;

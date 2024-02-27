@@ -84,11 +84,11 @@ CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint
 	double y;
 
 	if (isLog) {
-		y = y0-log10(calculatedPoint.y) * YScale*10;  // Перемещение y графика в центр + масштабирование (логарифм)
-		if (y>rc.Height()) y -= (y - rc.Height());
+		y = y0-log10(calculatedPoint.y) * YScale/7;  // Перемещение y графика в центр + масштабирование (логарифм)
+		//if (y>rc.Height()) y -= (y - rc.Height());
 	}
 	else {
-		y = y0 - calculatedPoint.y * YScale;  // Перемещение y графика в центр + масштабирование
+		y = y0 - calculatedPoint.y * YScale/30;  // Перемещение y графика в центр + масштабирование
 	}
 
 
@@ -138,5 +138,23 @@ void Lib_GraphConverter::GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& 
 		CPoint point = GenerateDrawablePoint(rc, DPFCalc, 0, rc.Height()-1, isLog);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
 
 		vec.push_back(point);  // Засовываем точку в вектор точек
+	}
+
+	if (isLog) {
+		int max=0;
+		int delta = 0;
+
+		for (int i = 0; i < N; i++) {
+			if (vec[i].y > max) max = vec[i].y;
+		}
+
+
+		if (max > rc.Height()) {
+			delta = max - rc.Height();
+		}
+
+		for (int i = 0; i < N; i++) {
+			vec[i].y -= delta;
+		}
 	}
 }
