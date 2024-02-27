@@ -208,7 +208,6 @@
     <ResourceCompile Include="Kursach.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="res\Kursach.rc2" />
   </ItemGroup>
   <ItemGroup>

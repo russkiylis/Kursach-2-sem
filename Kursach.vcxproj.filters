@@ -66,7 +66,6 @@
     <None Include="res\Kursach.rc2">
       <Filter>Файлы ресурсов</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Kursach.ico">

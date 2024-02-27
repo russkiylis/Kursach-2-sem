@@ -42,8 +42,6 @@ public:
 	// Проверка значения int и его возвращение
 	void CheckIntNumber(int& number, int smallest, int largest, CEdit& editBox);
 
-	// Вывод нарисованного изображения в формат BMP
-	//void PaintBMPExport(int uID);
 };
 
 // Класс вычислений точек графиков

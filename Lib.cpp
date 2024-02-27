@@ -64,56 +64,6 @@ void Lib_InteractiveBoxesData::CheckIntNumber(int& number, int smallest, int lar
 	editBox.SetWindowTextW(intToCString(number));  // Задание нового значения в editBox
 }
 
-//void Lib_InteractiveBoxesData::PaintBMPExport(int uId)
-//{
-//	CWnd* pWnd = GetDlgItem(ID_SIGNALGRAPH_WINDOW);
-//
-//	if (!pWnd)
-//		return;
-//
-//	CWindowDC winDC(pWnd);
-//
-//	CRect rc;
-//	pWnd->GetClientRect(&rc);
-//
-//	CDC memDC;
-//	memDC.CreateCompatibleDC(&winDC);
-//
-//	CBitmap bitMap;
-//	bitMap.CreateCompatibleBitmap(&winDC, rc.Width(), rc.Height());
-//
-//	HGDIOBJ pOld = memDC.SelectObject(&bitMap);
-//	memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &winDC, 0, 0, SRCCOPY);
-//	memDC.SelectObject(pOld);
-//
-//	static TCHAR szFilter[] = _T("BMP Files (*.bmp)|*.bmp|")
-//		_T("PNG Files (*.png)|*.png|GIF Files (*.gif)|*.gif|")
-//		_T("JPG Files (*.jpg)|*.jpg|All Files (*.*)|*.*||");
-//	CFileDialog dlg(FALSE, _T(".bmp"), NULL, 6UL, szFilter);
-//	if (IDOK == dlg.DoModal())
-//	{
-//		CImage image;
-//		image.Attach(HBITMAP(bitMap));
-//		CString strFull = dlg.GetOFN().lpstrFile;
-//		HRESULT hr;
-//
-//		if (-1 != strFull.Find(_T(".bmp")))
-//			hr = image.Save(strFull, ImageFormatBMP);
-//		else
-//		{
-//			strFull += _T(".bmp");
-//			hr = image.Save(strFull, ImageFormatBMP);
-//		}
-//		if (FAILED(hr))
-//		{
-//			CString strErr;
-//			strErr.Format(L" Couldn't Save File: %s, %x ", (LPCTSTR)strFull,
-//				hr);
-//			AfxMessageBox(strErr, MB_OK | MB_ICONERROR);
-//		}
-//	}
-//}
-
 dXY Lib_PointCalculation::SignalCalculation(double& x)
 {
 	//Собственно посчитанная координата y
@@ -130,7 +80,7 @@ dXY Lib_PointCalculation::SignalCalculation(double& x)
 CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, dXY& calculatedPoint, int x0, int y0, bool isLog)
 {
 
-	double x = x0 + calculatedPoint.x * XScale;  // Перемещение х графика в центр + масштабирование
+	double x = x0 + calculatedPoint.x * XScale*100000;  // Перемещение х графика в центр + масштабирование
 	double y;
 
 	if (isLog) {
