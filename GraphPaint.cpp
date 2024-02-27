@@ -35,6 +35,9 @@ void CSignalPaint::OnPaint()
 
 	dc.FillSolidRect(rc, RGB(255, 255, 255));  // Заполнение белым
 
+	CPen Pen(PS_SOLID, 2, RGB(250, 120, 60));  // Создание пера
+	HGDIOBJ old = dc.SelectObject(Pen);  // Выбор пера
+
 	std::vector<CPoint> points;  // Автоматический динамический массив точек
 
 	converter.GenerateSignalGraphPoints(rc, points);  // Создание точек графика
@@ -80,6 +83,9 @@ void CDPFPaint::OnPaint()
 
 
 	dc.FillSolidRect(rc, RGB(255, 255, 255));  // Заполнение белым
+
+	CPen Pen(PS_SOLID, 2, RGB(250, 120, 60));  // Создание пера
+	HGDIOBJ old = dc.SelectObject(Pen);  // Выбор пера
 
 	std::vector<CPoint> points;  // Автоматический динамический массив точек
 

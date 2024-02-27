@@ -185,7 +185,7 @@ BOOL CKursachDlg::OnInitDialog()
 
 	// Ползунок графика ДПФ по Y
 	DPFGraph_YScale = 5;
-	DPFGraph_YControl.SetRange(1, 100);
+	DPFGraph_YControl.SetRange(1, 10);
 	DPFGraph_YControl.SetPos(5);
 
 	// Ползунок графика ДПФ по X
