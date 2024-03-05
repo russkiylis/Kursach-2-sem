@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CAboutDlg">
+    <Position X="4.5" Y="7" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="CAboutDlg::__unnamed_enum_0407_1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>KursachDlg.cpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>KursachDlg.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDPFPaint">
+    <Position X="10.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAiAgQAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAGBIAAEA=</HashCode>
+      <FileName>GraphPaint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CKursachApp">
+    <Position X="4.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAEAAAA=</HashCode>
+      <FileName>Kursach.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CKursachDlg">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="CKursachDlg::__unnamed_enum_0408_1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>KursachDlg.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>FACFAyFALAAgCIwCABEQAAhAAAAAGAQAAgCEFF5UBGQ=</HashCode>
+      <FileName>KursachDlg.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="DPF_Signal" />
+      <Field Name="Graph_Signal" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CSignalPaint">
+    <Position X="10.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAiAgAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAGBIAAEA=</HashCode>
+      <FileName>GraphPaint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lib_Converter">
+    <Position X="4.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Lib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lib_GraphConverter">
+    <Position X="12.75" Y="2" Width="2" />
+    <InheritanceLine Type="Lib_PointCalculation" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="13.75" Y="5" />
+        <Point X="13.75" Y="4.7" />
+        <Point X="12.45" Y="4.7" />
+        <Point X="12.45" Y="1.7" />
+        <Point X="13.75" Y="1.7" />
+        <Point X="13.75" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAEAAABAAAAAAAAAAAAAAAAAAAIAAAAEAEA=</HashCode>
+      <FileName>Lib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lib_InteractiveBoxesData">
+    <Position X="1.25" Y="1.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Lib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lib_PointCalculation">
+    <Position X="12.75" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAgAAAAAAAAAEBIAAAA=</HashCode>
+      <FileName>Lib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
