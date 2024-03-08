@@ -107,17 +107,4 @@ public:
 	CDPFPaint DPF_Signal;
 	afx_msg void OnBnClickedSignalgraphBmpbutton();
 	afx_msg void OnBnClickedDpfgraphBmpbutton();
-	afx_msg void OnStnClickedSignalgraphWindow();
-	// Координата Y сигнала
-	CStatic SignalGraph_YCoord;
-	// Координата -Y сигнала
-	CStatic SignalGraph_MYCoord;
-	// Координата Х сигнала
-	CStatic SignalGraph_XCoord;
-	// Координата Y графика фурье
-	CStatic DPFGraph_YCoord;
-	// Координата -y графика фурье
-	CStatic DPFGraph_MYCoord;
-	// Координата Х графика фурье
-	CStatic DPFGraph_XCoord;
 };

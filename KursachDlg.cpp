@@ -96,12 +96,6 @@ void CKursachDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Slider(pDX, ID_DPFGRAPH_XCONTROL2, DPFGraph_XScale);
 	DDX_Control(pDX, ID_DPFGRAPH_LOGBUTTON, DPFGraph_LogControl);
 	DDX_Check(pDX, ID_DPFGRAPH_LOGBUTTON, DPFGraph_IsLog);
-	DDX_Control(pDX, ID_SIGNALGRAPH_YCOORD, SignalGraph_YCoord);
-	DDX_Control(pDX, ID_SIGNALGRAPH_MYCOORD, SignalGraph_MYCoord);
-	DDX_Control(pDX, ID_SIGNALGRAPH_X, SignalGraph_XCoord);
-	DDX_Control(pDX, ID_DPFGRAPH_YCOORD, DPFGraph_YCoord);
-	DDX_Control(pDX, ID_DPFGRAPH_MYCOORD, DPFGraph_MYCoord);
-	DDX_Control(pDX, ID_DPFGRAPH_X, DPFGraph_XCoord);
 }
 
 // Подключение обработчиков событий
@@ -125,7 +119,6 @@ BEGIN_MESSAGE_MAP(CKursachDlg, CDialogEx)
 	ON_BN_CLICKED(ID_DPFGRAPH_LOGBUTTON, &CKursachDlg::OnBnClickedDpfgraphLogbutton)
 	ON_BN_CLICKED(ID_SIGNALGRAPH_BMPBUTTON, &CKursachDlg::OnBnClickedSignalgraphBmpbutton)
 	ON_BN_CLICKED(ID_DPFGRAPH_BMPBUTTON, &CKursachDlg::OnBnClickedDpfgraphBmpbutton)
-	ON_STN_CLICKED(ID_SIGNALGRAPH_WINDOW, &CKursachDlg::OnStnClickedSignalgraphWindow)
 END_MESSAGE_MAP()
 
 
@@ -192,7 +185,7 @@ BOOL CKursachDlg::OnInitDialog()
 
 	// Ползунок графика ДПФ по Y
 	DPFGraph_YScale = 50;
-	DPFGraph_YControl.SetRange(10, 200);
+	DPFGraph_YControl.SetRange(10, 100);
 	DPFGraph_YControl.SetPos(50);
 
 	// Ползунок графика ДПФ по X
@@ -611,10 +604,4 @@ void CKursachDlg::OnBnClickedDpfgraphBmpbutton()
 			AfxMessageBox(strErr, MB_OK | MB_ICONERROR);
 		}
 	}
-}
-
-
-void CKursachDlg::OnStnClickedSignalgraphWindow()
-{
-	// TODO: добавьте свой код обработчика уведомлений
 }

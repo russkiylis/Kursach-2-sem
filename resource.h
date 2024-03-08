@@ -28,13 +28,6 @@
 #define ID_M_SPIN                       1018
 #define ID_SIGNALGRAPH_WINDOW           1019
 #define ID_DPFGRAPH_WINDOW              1020
-#define ID_SIGNALGRAPH_YCOORD           1021
-#define ID_SIGNALGRAPH_MYCOORD          1022
-#define ID_SIGNALGRAPH_X                1023
-#define ID_DPFGRAPH_YCOORD              1024
-#define ID_DPFGRAPH_MYCOORD             1025
-#define ID_SIGNALGRAPH_X2               1026
-#define ID_DPFGRAPH_X                   1026
 
 // Next default values for new objects
 // 
@@ -42,7 +35,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1024
+#define _APS_NEXT_CONTROL_VALUE         1021
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
