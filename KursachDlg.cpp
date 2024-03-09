@@ -63,9 +63,11 @@ CKursachDlg::CKursachDlg(CWnd* pParent /*=nullptr*/)
 	, DPFGraph_XScale(0)
 	, DPFGraph_IsLog(FALSE)
 	, SWidth(0)
-	, SDensity(0)
+	, SXDensity(0)
 	, DWidth(0)
-	, DDensity(0)
+	, DXDensity(0)
+	, SYDensity(0)
+	, DYDensity(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -113,13 +115,17 @@ void CKursachDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_MFCCOLORBUTTON5, DCColor);
 	DDX_Text(pDX, IDC_MFCCOLORBUTTON6, DBColor);
 	DDX_Control(pDX, IDC_SLIDER1, SWidthControl);
-	DDX_Control(pDX, IDC_SLIDER2, SDensityControl);
+	DDX_Control(pDX, IDC_SLIDER2, SXDensityControl);
 	DDX_Control(pDX, IDC_SLIDER3, DWidthControl);
-	DDX_Control(pDX, IDC_SLIDER4, DDensityControl);
+	DDX_Control(pDX, IDC_SLIDER4, DXDensityControl);
 	DDX_Slider(pDX, IDC_SLIDER1, SWidth);
-	DDX_Slider(pDX, IDC_SLIDER2, SDensity);
+	DDX_Slider(pDX, IDC_SLIDER2, SXDensity);
 	DDX_Slider(pDX, IDC_SLIDER3, DWidth);
-	DDX_Slider(pDX, IDC_SLIDER4, DDensity);
+	DDX_Slider(pDX, IDC_SLIDER4, DXDensity);
+	DDX_Control(pDX, IDC_SLIDER5, SYDensityControl);
+	DDX_Slider(pDX, IDC_SLIDER5, SYDensity);
+	DDX_Control(pDX, IDC_SLIDER6, DYDensityControl);
+	DDX_Slider(pDX, IDC_SLIDER6, DYDensity);
 }
 
 // Подключение обработчиков событий
@@ -151,6 +157,10 @@ BEGIN_MESSAGE_MAP(CKursachDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_MFCCOLORBUTTON6, &CKursachDlg::OnBnClickedMfccolorbutton6)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER1, &CKursachDlg::OnNMCustomdrawSlider1)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER3, &CKursachDlg::OnNMCustomdrawSlider3)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER2, &CKursachDlg::OnNMCustomdrawSlider2)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER5, &CKursachDlg::OnNMCustomdrawSlider5)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER4, &CKursachDlg::OnNMCustomdrawSlider4)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER6, &CKursachDlg::OnNMCustomdrawSlider6)
 END_MESSAGE_MAP()
 
 
@@ -232,6 +242,25 @@ BOOL CKursachDlg::OnInitDialog()
 	DWidthControl.SetRange(1, 5);
 	DWidthControl.SetPos(2);
 
+	// Ползунок плотности координат сигнала x
+	SXDensity = 25;
+	SXDensityControl.SetRange(10, 50);
+	SXDensityControl.SetPos(25);
+
+	// Ползунок плотности координат сигнала y
+	SYDensity = 25;
+	SYDensityControl.SetRange(10, 50);
+	SYDensityControl.SetPos(25);
+
+	// Ползунок плотности координат ДПФ x
+	DXDensity = 25;
+	DXDensityControl.SetRange(10, 50);
+	DXDensityControl.SetPos(25);
+
+	// Ползунок плотности координат ДПФ y
+	DYDensity = 25;
+	DYDensityControl.SetRange(10, 50);
+	DYDensityControl.SetPos(25);
 
 	// Начальное задание цвета
 	SGColor = RGB(0, 0, 0);
@@ -258,6 +287,8 @@ BOOL CKursachDlg::OnInitDialog()
 	Graph_Signal.CColor = SCColor;
 	Graph_Signal.BColor = SBColor;
 	Graph_Signal.GWidth = SWidth;
+	Graph_Signal.CXDensity = SXDensity;
+	Graph_Signal.CYDensity = SYDensity;
 
 	// Передача в класс построения графика ДПФ
 	DPF_Signal.N = N;
@@ -270,6 +301,8 @@ BOOL CKursachDlg::OnInitDialog()
 	DPF_Signal.CColor = DCColor;
 	DPF_Signal.BColor = DBColor;
 	DPF_Signal.GWidth = DWidth;
+	DPF_Signal.CXDensity = DXDensity;
+	DPF_Signal.CYDensity = DYDensity;
 
 	// Назначение окошка для рисования
 	Graph_Signal.SubclassDlgItem(ID_SIGNALGRAPH_WINDOW, this);
@@ -356,6 +389,8 @@ void CKursachDlg::OnBnClickedOk()
 	Graph_Signal.GColor = SGColor;
 	Graph_Signal.CColor = SCColor;
 	Graph_Signal.BColor = SBColor;
+	Graph_Signal.CXDensity = SXDensity;
+	Graph_Signal.CYDensity = SYDensity;
 
 	// Передача в класс построения графика ДПФ
 	DPF_Signal.N = N;
@@ -367,6 +402,8 @@ void CKursachDlg::OnBnClickedOk()
 	DPF_Signal.GColor = DGColor;
 	DPF_Signal.CColor = DCColor;
 	DPF_Signal.BColor = DBColor;
+	DPF_Signal.CXDensity = DXDensity;
+	DPF_Signal.CYDensity = DYDensity;
 
 	// Инвалидация окошек с графиком (перерисовывание)
 	Graph_Signal.Invalidate();
@@ -744,6 +781,8 @@ void CKursachDlg::OnBnClickedMfccolorbutton6()
 
 #pragma endregion
 
+#pragma region Ширина графиков
+
 void CKursachDlg::OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
@@ -765,3 +804,53 @@ void CKursachDlg::OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 }
+
+#pragma endregion
+
+#pragma region Плотность координат
+
+void CKursachDlg::OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	
+	UpdateData();
+	Graph_Signal.CXDensity = SXDensity;
+	Graph_Signal.Invalidate();
+
+	*pResult = 0;
+}
+
+void CKursachDlg::OnNMCustomdrawSlider5(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	
+	UpdateData();
+	Graph_Signal.CYDensity = SYDensity;
+	Graph_Signal.Invalidate();
+
+	*pResult = 0;
+}
+
+void CKursachDlg::OnNMCustomdrawSlider4(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	
+	UpdateData();
+	DPF_Signal.CXDensity = DXDensity;
+	DPF_Signal.Invalidate();
+
+	*pResult = 0;
+}
+
+void CKursachDlg::OnNMCustomdrawSlider6(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	
+	UpdateData();
+	DPF_Signal.CYDensity = DYDensity;
+	DPF_Signal.Invalidate();
+
+	*pResult = 0;
+}
+
+#pragma endregion

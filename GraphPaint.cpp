@@ -24,6 +24,8 @@ void CSignalPaint::OnPaint()
 	converter.M = M;
 	converter.XScale = XScale;
 	converter.YScale = YScale;
+	converter.XDensity = CXDensity;
+	converter.YDensity = CYDensity;
 
 	// Получить прямоугольник окошка
 	GetClientRect(&rc);
@@ -33,12 +35,15 @@ void CSignalPaint::OnPaint()
 	dc.SelectClipRgn(&rgn);  // Указывание, что рисовать можно только в этом регионе
 
 
+
 	dc.FillSolidRect(rc, BColor);  // Заполнение фона
+
+
 
 	CPen GraphPen(PS_SOLID, GWidth, GColor);  // Создание пера графика
 	HGDIOBJ old = dc.SelectObject(GraphPen);  // Выбор пера графика
 
-	std::vector<CPoint> points;  // Автоматический динамический массив точек
+	std::vector<CPoint> points;  // Автоматический динамический массив точек графика
 
 	converter.GenerateSignalGraphPoints(rc, points);  // Создание точек графика
 
@@ -48,6 +53,40 @@ void CSignalPaint::OnPaint()
 		dc.LineTo(points[i]);
 	}
 
+
+
+	CPen CoordPen(PS_DOT, 1, CColor);  // Создание пера координат
+	HGDIOBJ old1 = dc.SelectObject(CoordPen);  // Выбор пера координат
+
+	// Шрифт для Х координаты
+	CFont Xfont;
+	Xfont.CreateFont(
+		12,  //nHeight
+		0,  //nWidth
+		700,  //nEscapement
+		0,  //nOrientation
+		FW_NORMAL,  //nWeight
+		FALSE,  //bItalic
+		FALSE,  //bUnderline
+		0,  //cStrikeOut
+		ANSI_CHARSET,  //nCharSet
+		OUT_DEFAULT_PRECIS,  //nOutPrecision
+		CLIP_DEFAULT_PRECIS,  //nClipPrecision
+		DEFAULT_QUALITY,  //nQuality
+		DEFAULT_PITCH | FF_SWISS,  //nPitchAndFamily
+		_T("Arial")  //lpszFacename
+	);
+	CFont* def_font = dc.SelectObject(&Xfont);  // Выбор шрифта
+
+
+	std::vector<CoordLine> xLines, yLines;  // Автоматический динамический массив линий координат
+	converter.GenerateXCoordLines(rc, xLines);
+
+	for (int i = 1; i < xLines.size(); i++) {
+		dc.MoveTo(CPoint(xLines[i].coord, 0));
+		dc.LineTo(CPoint(xLines[i].coord, rc.Height()));
+		dc.TextOut(xLines[i].coord-10, rc.Height() - 10, xLines[i].value);
+	}
 }
 
 // Превращение CSignalPaint в динамический класс (для того чтобы втыкать переменные)
@@ -73,6 +112,8 @@ void CDPFPaint::OnPaint()
 	converter.XScale = XScale;
 	converter.YScale = YScale;
 	converter.isLog = IsLog;
+	converter.XDensity = CXDensity;
+	converter.YDensity = CYDensity;
 
 	// Получить прямоугольник окошка
 	GetClientRect(&rc);
@@ -82,7 +123,10 @@ void CDPFPaint::OnPaint()
 	dc.SelectClipRgn(&rgn);  // Указывание, что рисовать можно только в этом регионе
 
 
+
 	dc.FillSolidRect(rc, BColor);  // Заполнение фона
+
+
 
 	CPen GraphPen(PS_SOLID, GWidth, GColor);  // Создание пера графика
 	HGDIOBJ old = dc.SelectObject(GraphPen);  // Выбор пера графика
@@ -102,4 +146,38 @@ void CDPFPaint::OnPaint()
 		dc.LineTo(CPoint(points[i].x, rc.Height()));
 	}
 
+
+
+	CPen CoordPen(PS_DOT, 1, CColor);  // Создание пера координат
+	HGDIOBJ old1 = dc.SelectObject(CoordPen);  // Выбор пера координат
+
+	// Шрифт для Х координаты
+	CFont Xfont;
+	Xfont.CreateFont(
+		12,  //nHeight
+		0,  //nWidth
+		700,  //nEscapement
+		0,  //nOrientation
+		FW_NORMAL,  //nWeight
+		FALSE,  //bItalic
+		FALSE,  //bUnderline
+		0,  //cStrikeOut
+		ANSI_CHARSET,  //nCharSet
+		OUT_DEFAULT_PRECIS,  //nOutPrecision
+		CLIP_DEFAULT_PRECIS,  //nClipPrecision
+		DEFAULT_QUALITY,  //nQuality
+		DEFAULT_PITCH | FF_SWISS,  //nPitchAndFamily
+		_T("Arial")  //lpszFacename
+	);
+	CFont* def_font = dc.SelectObject(&Xfont);  // Выбор шрифта
+
+
+	std::vector<CoordLine> xLines, yLines;  // Автоматический динамический массив линий координат
+	converter.GenerateXCoordLines(rc, xLines);
+
+	for (int i = 1; i < xLines.size(); i++) {
+		dc.MoveTo(CPoint(xLines[i].coord, 0));
+		dc.LineTo(CPoint(xLines[i].coord, rc.Height()));
+		dc.TextOut(xLines[i].coord - 10, 50, xLines[i].value);
+	}
 }

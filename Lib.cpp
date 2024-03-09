@@ -142,7 +142,7 @@ void Lib_GraphConverter::GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& 
 
 	if (isLog) {
 		int max=0;
-		int delta = 0;
+		LogDelta = 0;
 
 		for (int i = 0; i < N; i++) {
 			if (vec[i].y > max) max = vec[i].y;
@@ -150,11 +150,23 @@ void Lib_GraphConverter::GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& 
 
 
 		if (max > rc.Height()) {
-			delta = max - rc.Height();
+			LogDelta = max - rc.Height();
 		}
 
 		for (int i = 0; i < N; i++) {
-			vec[i].y -= delta;
+			vec[i].y -= LogDelta;
 		}
+	}
+}
+
+void Lib_GraphConverter::GenerateXCoordLines(CRect& rc, std::vector<CoordLine>& vec)
+{
+	for (double i = 0; i < rc.Width(); i += double(XDensity)*double(XScale)/100) {
+
+		CoordLine cl;
+		cl.coord = i- double(XScale) / 100;
+		double a = i / double(XScale);
+		cl.value.Format(_T("%.f e-7"), i / double(XScale) * 100);
+		vec.push_back(cl);
 	}
 }

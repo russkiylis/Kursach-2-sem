@@ -38,6 +38,8 @@
 #define IDC_SLIDER2                     1028
 #define IDC_SLIDER3                     1029
 #define IDC_SLIDER4                     1030
+#define IDC_SLIDER5                     1031
+#define IDC_SLIDER6                     1032
 
 // Next default values for new objects
 // 

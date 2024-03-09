@@ -19,7 +19,7 @@ public:
 
     COLORREF GColor, CColor, BColor;
     int GWidth;
-    int CDensity;
+    int CXDensity, CYDensity;
 
     // ќбъ€вление карты событий
     DECLARE_MESSAGE_MAP()
@@ -52,7 +52,7 @@ public:
 
     COLORREF GColor, CColor, BColor;
     int GWidth;
-    int CDensity;
+    int CXDensity, CYDensity;
 
     // ќбъ€вление карты событий
     DECLARE_MESSAGE_MAP()

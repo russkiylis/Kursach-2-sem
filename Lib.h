@@ -20,6 +20,12 @@ typedef struct iXY {
 	int y;
 } iXY;
 
+// Одна линия координат
+typedef struct CoordLine {
+	CString value;
+	double coord;
+}CoordLine;
+
 // Класс, в котором содержатся функции конвертации значений
 class Lib_Converter {
 public:
@@ -70,9 +76,14 @@ public:
 	// Генерация точек графика ДПФ
 	void GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& vec);
 
+	// Генерация линий координат по х
+	void GenerateXCoordLines(CRect& rc, std::vector<CoordLine>& vec);
+
 	// Переменные
 
 	int XScale;
 	int YScale;
+	int LogDelta;
+	int XDensity, YDensity;
 	bool isLog;
 };
