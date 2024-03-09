@@ -62,6 +62,10 @@ CKursachDlg::CKursachDlg(CWnd* pParent /*=nullptr*/)
 	, DPFGraph_YScale(0)
 	, DPFGraph_XScale(0)
 	, DPFGraph_IsLog(FALSE)
+	, SWidth(0)
+	, SDensity(0)
+	, DWidth(0)
+	, DDensity(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -96,6 +100,26 @@ void CKursachDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Slider(pDX, ID_DPFGRAPH_XCONTROL2, DPFGraph_XScale);
 	DDX_Control(pDX, ID_DPFGRAPH_LOGBUTTON, DPFGraph_LogControl);
 	DDX_Check(pDX, ID_DPFGRAPH_LOGBUTTON, DPFGraph_IsLog);
+	DDX_Control(pDX, IDC_MFCCOLORBUTTON1, SGColorControl);
+	DDX_Control(pDX, IDC_MFCCOLORBUTTON2, SCColorControl);
+	DDX_Control(pDX, IDC_MFCCOLORBUTTON3, SBColorControl);
+	DDX_Control(pDX, IDC_MFCCOLORBUTTON4, DGColorControl);
+	DDX_Control(pDX, IDC_MFCCOLORBUTTON5, DCColorControl);
+	DDX_Control(pDX, IDC_MFCCOLORBUTTON6, DBColorControl);
+	DDX_Text(pDX, IDC_MFCCOLORBUTTON1, SGColor);
+	DDX_Text(pDX, IDC_MFCCOLORBUTTON2, SCColor);
+	DDX_Text(pDX, IDC_MFCCOLORBUTTON3, SBColor);
+	DDX_Text(pDX, IDC_MFCCOLORBUTTON4, DGColor);
+	DDX_Text(pDX, IDC_MFCCOLORBUTTON5, DCColor);
+	DDX_Text(pDX, IDC_MFCCOLORBUTTON6, DBColor);
+	DDX_Control(pDX, IDC_SLIDER1, SWidthControl);
+	DDX_Control(pDX, IDC_SLIDER2, SDensityControl);
+	DDX_Control(pDX, IDC_SLIDER3, DWidthControl);
+	DDX_Control(pDX, IDC_SLIDER4, DDensityControl);
+	DDX_Slider(pDX, IDC_SLIDER1, SWidth);
+	DDX_Slider(pDX, IDC_SLIDER2, SDensity);
+	DDX_Slider(pDX, IDC_SLIDER3, DWidth);
+	DDX_Slider(pDX, IDC_SLIDER4, DDensity);
 }
 
 // Подключение обработчиков событий
@@ -119,6 +143,14 @@ BEGIN_MESSAGE_MAP(CKursachDlg, CDialogEx)
 	ON_BN_CLICKED(ID_DPFGRAPH_LOGBUTTON, &CKursachDlg::OnBnClickedDpfgraphLogbutton)
 	ON_BN_CLICKED(ID_SIGNALGRAPH_BMPBUTTON, &CKursachDlg::OnBnClickedSignalgraphBmpbutton)
 	ON_BN_CLICKED(ID_DPFGRAPH_BMPBUTTON, &CKursachDlg::OnBnClickedDpfgraphBmpbutton)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON1, &CKursachDlg::OnBnClickedMfccolorbutton1)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON2, &CKursachDlg::OnBnClickedMfccolorbutton2)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON3, &CKursachDlg::OnBnClickedMfccolorbutton3)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON4, &CKursachDlg::OnBnClickedMfccolorbutton4)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON5, &CKursachDlg::OnBnClickedMfccolorbutton5)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON6, &CKursachDlg::OnBnClickedMfccolorbutton6)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER1, &CKursachDlg::OnNMCustomdrawSlider1)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER3, &CKursachDlg::OnNMCustomdrawSlider3)
 END_MESSAGE_MAP()
 
 
@@ -163,13 +195,10 @@ BOOL CKursachDlg::OnInitDialog()
 	// Инициализация переменных
 	N = 500;
 	N_Edit.SetWindowTextW(L"500");
-
 	F = 2000000;
 	F_Edit.SetWindowTextW(L"2000000");
-
 	Fm = 400000;
 	Fm_Edit.SetWindowTextW(L"400000");
-
 	M = 5;
 	M_Edit.SetWindowTextW(L"5");
 
@@ -193,6 +222,31 @@ BOOL CKursachDlg::OnInitDialog()
 	DPFGraph_XControl.SetRange(200, 1000);
 	DPFGraph_XControl.SetPos(300);
 
+	// Ползунок ширины сигнала
+	SWidth = 2;
+	SWidthControl.SetRange(1, 5);
+	SWidthControl.SetPos(2);
+
+	// Ползунок ширины ДПФ
+	DWidth = 2;
+	DWidthControl.SetRange(1, 5);
+	DWidthControl.SetPos(2);
+
+
+	// Начальное задание цвета
+	SGColor = RGB(0, 0, 0);
+	DGColor = RGB(0, 0, 0);
+	SCColor = RGB(200, 200, 200);
+	DCColor = RGB(200, 200, 200);
+	SBColor = RGB(255, 255, 255);
+	DBColor = RGB(255, 255, 255);
+	SGColorControl.SetColor(SGColor);
+	DGColorControl.SetColor(DGColor);
+	SCColorControl.SetColor(SCColor);
+	DCColorControl.SetColor(DCColor);
+	SBColorControl.SetColor(SBColor);
+	DBColorControl.SetColor(DBColor);
+
 	// Передача в класс построения графика сигнала
 	Graph_Signal.N = N;
 	Graph_Signal.F = F;
@@ -200,6 +254,10 @@ BOOL CKursachDlg::OnInitDialog()
 	Graph_Signal.M = M;
 	Graph_Signal.XScale = SignalGraph_XScale;
 	Graph_Signal.YScale = SignalGraph_YScale;
+	Graph_Signal.GColor = SGColor;
+	Graph_Signal.CColor = SCColor;
+	Graph_Signal.BColor = SBColor;
+	Graph_Signal.GWidth = SWidth;
 
 	// Передача в класс построения графика ДПФ
 	DPF_Signal.N = N;
@@ -208,6 +266,10 @@ BOOL CKursachDlg::OnInitDialog()
 	DPF_Signal.M = M;
 	DPF_Signal.XScale = DPFGraph_XScale;
 	DPF_Signal.YScale = DPFGraph_YScale;
+	DPF_Signal.GColor = DGColor;
+	DPF_Signal.CColor = DCColor;
+	DPF_Signal.BColor = DBColor;
+	DPF_Signal.GWidth = DWidth;
 
 	// Назначение окошка для рисования
 	Graph_Signal.SubclassDlgItem(ID_SIGNALGRAPH_WINDOW, this);
@@ -276,6 +338,14 @@ void CKursachDlg::OnBnClickedOk()
 	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
 	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
 
+	// Получение цвета
+	SGColor = SGColorControl.GetColor();
+	SCColor = SCColorControl.GetColor();
+	SBColor = SBColorControl.GetColor();
+	DGColor = DGColorControl.GetColor();
+	DCColor = DCColorControl.GetColor();
+	DBColor = DBColorControl.GetColor();
+
 	// Передача в класс построения графика сигнала
 	Graph_Signal.N = N;
 	Graph_Signal.F = F;
@@ -283,6 +353,9 @@ void CKursachDlg::OnBnClickedOk()
 	Graph_Signal.M = M;
 	Graph_Signal.XScale = SignalGraph_XScale;
 	Graph_Signal.YScale = SignalGraph_YScale;
+	Graph_Signal.GColor = SGColor;
+	Graph_Signal.CColor = SCColor;
+	Graph_Signal.BColor = SBColor;
 
 	// Передача в класс построения графика ДПФ
 	DPF_Signal.N = N;
@@ -291,6 +364,9 @@ void CKursachDlg::OnBnClickedOk()
 	DPF_Signal.M = M;
 	DPF_Signal.XScale = DPFGraph_XScale;
 	DPF_Signal.YScale = DPFGraph_YScale;
+	DPF_Signal.GColor = DGColor;
+	DPF_Signal.CColor = DCColor;
+	DPF_Signal.BColor = DBColor;
 
 	// Инвалидация окошек с графиком (перерисовывание)
 	Graph_Signal.Invalidate();
@@ -505,6 +581,8 @@ void CKursachDlg::OnBnClickedDpfgraphLogbutton()
 
 #pragma endregion
 
+#pragma region Вывод в картинку
+
 void CKursachDlg::OnBnClickedSignalgraphBmpbutton()
 {
 	CWnd* pWnd = GetDlgItem(ID_SIGNALGRAPH_WINDOW);
@@ -604,4 +682,86 @@ void CKursachDlg::OnBnClickedDpfgraphBmpbutton()
 			AfxMessageBox(strErr, MB_OK | MB_ICONERROR);
 		}
 	}
+}
+
+#pragma endregion
+
+#pragma region Обработка цвета
+
+void CKursachDlg::OnBnClickedMfccolorbutton1()
+{
+	// Получение цвета
+	SGColor = SGColorControl.GetColor();
+
+	Graph_Signal.GColor = SGColor;
+	Graph_Signal.Invalidate();
+}
+
+void CKursachDlg::OnBnClickedMfccolorbutton2()
+{
+	// Получение цвета
+	SCColor = SCColorControl.GetColor();
+
+	Graph_Signal.CColor = SCColor;
+	Graph_Signal.Invalidate();
+}
+
+void CKursachDlg::OnBnClickedMfccolorbutton3()
+{	
+	// Получение цвета
+	SBColor = SBColorControl.GetColor();
+
+	Graph_Signal.BColor = SBColor;
+	Graph_Signal.Invalidate();
+}
+
+void CKursachDlg::OnBnClickedMfccolorbutton4()
+{
+	// Получение цвета
+	DGColor = DGColorControl.GetColor();
+
+	DPF_Signal.GColor = DGColor;
+	DPF_Signal.Invalidate();
+}
+
+void CKursachDlg::OnBnClickedMfccolorbutton5()
+{
+	// Получение цвета
+	DCColor = DCColorControl.GetColor();
+
+	DPF_Signal.CColor = DCColor;
+	DPF_Signal.Invalidate();
+}
+
+void CKursachDlg::OnBnClickedMfccolorbutton6()
+{
+	// Получение цвета
+	DBColor = DBColorControl.GetColor();
+
+	DPF_Signal.BColor = DBColor;
+	DPF_Signal.Invalidate();
+}
+
+#pragma endregion
+
+void CKursachDlg::OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	
+	UpdateData(); // Обновление информации
+	Graph_Signal.GWidth = SWidth;
+	Graph_Signal.Invalidate();
+
+	*pResult = 0;
+}
+
+void CKursachDlg::OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	
+	UpdateData(); // Обновление информации
+	DPF_Signal.GWidth = DWidth;
+	DPF_Signal.Invalidate();
+
+	*pResult = 0;
 }

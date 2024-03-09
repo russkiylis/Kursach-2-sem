@@ -17,6 +17,10 @@ public:
     int XScale;
     int YScale;
 
+    COLORREF GColor, CColor, BColor;
+    int GWidth;
+    int CDensity;
+
     // ќбъ€вление карты событий
     DECLARE_MESSAGE_MAP()
 
@@ -45,6 +49,10 @@ public:
     int XScale;
     int YScale;
     bool IsLog;
+
+    COLORREF GColor, CColor, BColor;
+    int GWidth;
+    int CDensity;
 
     // ќбъ€вление карты событий
     DECLARE_MESSAGE_MAP()

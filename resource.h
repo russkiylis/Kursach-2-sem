@@ -34,6 +34,10 @@
 #define IDC_MFCCOLORBUTTON4             1024
 #define IDC_MFCCOLORBUTTON5             1025
 #define IDC_MFCCOLORBUTTON6             1026
+#define IDC_SLIDER1                     1027
+#define IDC_SLIDER2                     1028
+#define IDC_SLIDER3                     1029
+#define IDC_SLIDER4                     1030
 
 // Next default values for new objects
 // 
@@ -41,7 +45,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1024
+#define _APS_NEXT_CONTROL_VALUE         1029
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

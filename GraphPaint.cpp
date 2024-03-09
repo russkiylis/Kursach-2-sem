@@ -33,10 +33,10 @@ void CSignalPaint::OnPaint()
 	dc.SelectClipRgn(&rgn);  // Указывание, что рисовать можно только в этом регионе
 
 
-	dc.FillSolidRect(rc, RGB(255, 255, 255));  // Заполнение белым
+	dc.FillSolidRect(rc, BColor);  // Заполнение фона
 
-	CPen Pen(PS_SOLID, 2, RGB(250, 120, 60));  // Создание пера
-	HGDIOBJ old = dc.SelectObject(Pen);  // Выбор пера
+	CPen GraphPen(PS_SOLID, GWidth, GColor);  // Создание пера графика
+	HGDIOBJ old = dc.SelectObject(GraphPen);  // Выбор пера графика
 
 	std::vector<CPoint> points;  // Автоматический динамический массив точек
 
@@ -82,10 +82,10 @@ void CDPFPaint::OnPaint()
 	dc.SelectClipRgn(&rgn);  // Указывание, что рисовать можно только в этом регионе
 
 
-	dc.FillSolidRect(rc, RGB(255, 255, 255));  // Заполнение белым
+	dc.FillSolidRect(rc, BColor);  // Заполнение фона
 
-	CPen Pen(PS_SOLID, 2, RGB(250, 120, 60));  // Создание пера
-	HGDIOBJ old = dc.SelectObject(Pen);  // Выбор пера
+	CPen GraphPen(PS_SOLID, GWidth, GColor);  // Создание пера графика
+	HGDIOBJ old = dc.SelectObject(GraphPen);  // Выбор пера графика
 
 	std::vector<CPoint> points;  // Автоматический динамический массив точек
 
