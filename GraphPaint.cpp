@@ -94,8 +94,12 @@ void CDPFPaint::OnPaint()
 	dc.MoveTo(points[0]);  // Перемещение "пера" в начало графика
 
 	// Собственно рисование графика
+	dc.LineTo(CPoint(points[0].x, rc.Height()));
+
+	// Собственно рисование графика
 	for (int i = 1; i < points.size(); i++) {
-		dc.LineTo(points[i]);
+		dc.MoveTo(points[i]);
+		dc.LineTo(CPoint(points[i].x, rc.Height()));
 	}
 
 }
