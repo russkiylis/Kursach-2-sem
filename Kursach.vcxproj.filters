@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Kursach.h">
+    <ClInclude Include="Radiosignal.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="KursachDlg.h">
+    <ClInclude Include="RadiosignalDlg.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
@@ -41,10 +41,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Kursach.cpp">
+    <ClCompile Include="Radiosignal.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="KursachDlg.cpp">
+    <ClCompile Include="RadiosignalDlg.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">

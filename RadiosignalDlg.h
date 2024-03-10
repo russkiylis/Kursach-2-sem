@@ -4,12 +4,12 @@
 #pragma once
 #include "GraphPaint.h"
 
-// Диалоговое окно CKursachDlg
-class CKursachDlg : public CDialogEx
+// Диалоговое окно CRadiosignalDlg
+class CRadiosignalDlg : public CDialogEx
 {
 // Создание
 public:
-	CKursachDlg(CWnd* pParent = nullptr);	// стандартный конструктор
+	CRadiosignalDlg(CWnd* pParent = nullptr);	// стандартный конструктор
 
 // Данные диалогового окна
 #ifdef AFX_DESIGN_TIME
@@ -87,7 +87,7 @@ public:
 	afx_msg void OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pResult);
 
 	// Переменная рисования графика сигнала
-	CSignalPaint Graph_Signal;
+	CGraphPaint Signal;
 	// Переменная управления ползунка Y графика ДПФ
 	CSliderCtrl DPFGraph_YControl;
 	// Переменная масштаба графика ДПФ по Y
@@ -104,7 +104,7 @@ public:
 	afx_msg void OnNMCustomdrawDpfgraphXcontrol2(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBnClickedDpfgraphLogbutton();
 	// Переменная рисования ДПФ
-	CDPFPaint DPF_Signal;
+	CGraphPaint DPF;
 	afx_msg void OnBnClickedSignalgraphBmpbutton();
 	afx_msg void OnBnClickedDpfgraphBmpbutton();
 	CMFCColorButton SGColorControl;
@@ -143,4 +143,11 @@ public:
 	afx_msg void OnNMCustomdrawSlider5(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNMCustomdrawSlider4(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNMCustomdrawSlider6(NMHDR* pNMHDR, LRESULT* pResult);
+protected:
+	// Сохранение в реестр Windows
+	void RegistrySave();
+public:
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButton3();
+	afx_msg void OnClose();
 };

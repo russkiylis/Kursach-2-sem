@@ -4,24 +4,24 @@
 
 #include "pch.h"
 #include "framework.h"
-#include "Kursach.h"
-#include "KursachDlg.h"
+#include "Radiosignal.h"
+#include "RadiosignalDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// CKursachApp
+// CRadiosignalApp
 
-BEGIN_MESSAGE_MAP(CKursachApp, CWinApp)
+BEGIN_MESSAGE_MAP(CRadiosignalApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
-// Создание CKursachApp
+// Создание CRadiosignalApp
 
-CKursachApp::CKursachApp()
+CRadiosignalApp::CRadiosignalApp()
 {
 	// поддержка диспетчера перезагрузки
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
@@ -31,13 +31,13 @@ CKursachApp::CKursachApp()
 }
 
 
-// Единственный объект CKursachApp
+// Единственный объект CRadiosignalApp
 
-CKursachApp theApp;
+CRadiosignalApp theApp;
 
-// Инициализация CKursachApp
+// Инициализация CRadiosignalApp
 
-BOOL CKursachApp::InitInstance()
+BOOL CRadiosignalApp::InitInstance()
 {
 	// InitCommonControlsEx() требуется для Windows XP, если манифест
 	// приложения использует ComCtl32.dll версии 6 или более поздней версии для включения
@@ -68,9 +68,9 @@ BOOL CKursachApp::InitInstance()
 	// Измените раздел реестра, в котором хранятся параметры
 	// TODO: следует изменить эту строку на что-нибудь подходящее,
 	// например на название организации
-	SetRegistryKey(_T("Локальные приложения, созданные с помощью мастера приложений"));
+	SetRegistryKey(_T("russkiylis"));
 
-	CKursachDlg dlg;
+	CRadiosignalDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

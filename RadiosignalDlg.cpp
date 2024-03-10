@@ -5,12 +5,14 @@
 #include "pch.h"
 #include "afxdialogex.h"
 #include "framework.h"
-#include "Kursach.h"
-#include "KursachDlg.h"
+#include "Radiosignal.h"
+#include "RadiosignalDlg.h"
 
 #include <initguid.h>
 DEFINE_GUID(ImageFormatBMP, 0xb96b3cab, 0x0728, 0x11d3, 0x9d, 0x7b,
 	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
+
+bool IsRestart = false;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -50,8 +52,8 @@ END_MESSAGE_MAP()
 #pragma endregion
 
 
-// Диалоговое окно CKursachDlg
-CKursachDlg::CKursachDlg(CWnd* pParent /*=nullptr*/)
+// Диалоговое окно CRadiosignalDlg
+CRadiosignalDlg::CRadiosignalDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_KURSACH_DIALOG, pParent)
 	, N(500)
 	, F(2000000)
@@ -73,7 +75,7 @@ CKursachDlg::CKursachDlg(CWnd* pParent /*=nullptr*/)
 }
 
 // Связь переменных с интерфейсом
-void CKursachDlg::DoDataExchange(CDataExchange* pDX)
+void CRadiosignalDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, ID_N_SPIN, N_Spin);
@@ -129,44 +131,47 @@ void CKursachDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 // Подключение обработчиков событий
-BEGIN_MESSAGE_MAP(CKursachDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CRadiosignalDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDOK, &CKursachDlg::OnBnClickedOk)
-	ON_NOTIFY(UDN_DELTAPOS, ID_N_SPIN, &CKursachDlg::OnDeltaposNSpin)
+	ON_BN_CLICKED(IDOK, &CRadiosignalDlg::OnBnClickedOk)
+	ON_NOTIFY(UDN_DELTAPOS, ID_N_SPIN, &CRadiosignalDlg::OnDeltaposNSpin)
 	ON_WM_SYSCOMMAND()
-	ON_EN_KILLFOCUS(ID_N_EDIT, &CKursachDlg::OnEnKillfocusNEdit)
-	ON_EN_KILLFOCUS(ID_F_EDIT, &CKursachDlg::OnEnKillfocusFEdit)
-	ON_NOTIFY(UDN_DELTAPOS, ID_F_SPIN, &CKursachDlg::OnDeltaposFSpin)
-	ON_EN_KILLFOCUS(ID_Fm_EDIT, &CKursachDlg::OnEnKillfocusFmEdit)
-	ON_NOTIFY(UDN_DELTAPOS, ID_Fm_SPIN, &CKursachDlg::OnDeltaposFmSpin)
-	ON_EN_KILLFOCUS(ID_M_EDIT, &CKursachDlg::OnEnKillfocusMEdit)
-	ON_NOTIFY(UDN_DELTAPOS, ID_M_SPIN, &CKursachDlg::OnDeltaposMSpin)
-	ON_NOTIFY(NM_CUSTOMDRAW, ID_SIGNALGRAPH_YCONTROL, &CKursachDlg::OnNMCustomdrawSignalgraphYcontrol)
-	ON_NOTIFY(NM_CUSTOMDRAW, ID_SIGNALGRAPH_XCONTROL, &CKursachDlg::OnNMCustomdrawSignalgraphXcontrol)
-	ON_NOTIFY(NM_CUSTOMDRAW, ID_DPFGRAPH_YCONTROL2, &CKursachDlg::OnNMCustomdrawDpfgraphYcontrol2)
-	ON_NOTIFY(NM_CUSTOMDRAW, ID_DPFGRAPH_XCONTROL2, &CKursachDlg::OnNMCustomdrawDpfgraphXcontrol2)
-	ON_BN_CLICKED(ID_DPFGRAPH_LOGBUTTON, &CKursachDlg::OnBnClickedDpfgraphLogbutton)
-	ON_BN_CLICKED(ID_SIGNALGRAPH_BMPBUTTON, &CKursachDlg::OnBnClickedSignalgraphBmpbutton)
-	ON_BN_CLICKED(ID_DPFGRAPH_BMPBUTTON, &CKursachDlg::OnBnClickedDpfgraphBmpbutton)
-	ON_BN_CLICKED(IDC_MFCCOLORBUTTON1, &CKursachDlg::OnBnClickedMfccolorbutton1)
-	ON_BN_CLICKED(IDC_MFCCOLORBUTTON2, &CKursachDlg::OnBnClickedMfccolorbutton2)
-	ON_BN_CLICKED(IDC_MFCCOLORBUTTON3, &CKursachDlg::OnBnClickedMfccolorbutton3)
-	ON_BN_CLICKED(IDC_MFCCOLORBUTTON4, &CKursachDlg::OnBnClickedMfccolorbutton4)
-	ON_BN_CLICKED(IDC_MFCCOLORBUTTON5, &CKursachDlg::OnBnClickedMfccolorbutton5)
-	ON_BN_CLICKED(IDC_MFCCOLORBUTTON6, &CKursachDlg::OnBnClickedMfccolorbutton6)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER1, &CKursachDlg::OnNMCustomdrawSlider1)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER3, &CKursachDlg::OnNMCustomdrawSlider3)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER2, &CKursachDlg::OnNMCustomdrawSlider2)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER5, &CKursachDlg::OnNMCustomdrawSlider5)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER4, &CKursachDlg::OnNMCustomdrawSlider4)
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER6, &CKursachDlg::OnNMCustomdrawSlider6)
+	ON_EN_KILLFOCUS(ID_N_EDIT, &CRadiosignalDlg::OnEnKillfocusNEdit)
+	ON_EN_KILLFOCUS(ID_F_EDIT, &CRadiosignalDlg::OnEnKillfocusFEdit)
+	ON_NOTIFY(UDN_DELTAPOS, ID_F_SPIN, &CRadiosignalDlg::OnDeltaposFSpin)
+	ON_EN_KILLFOCUS(ID_Fm_EDIT, &CRadiosignalDlg::OnEnKillfocusFmEdit)
+	ON_NOTIFY(UDN_DELTAPOS, ID_Fm_SPIN, &CRadiosignalDlg::OnDeltaposFmSpin)
+	ON_EN_KILLFOCUS(ID_M_EDIT, &CRadiosignalDlg::OnEnKillfocusMEdit)
+	ON_NOTIFY(UDN_DELTAPOS, ID_M_SPIN, &CRadiosignalDlg::OnDeltaposMSpin)
+	ON_NOTIFY(NM_CUSTOMDRAW, ID_SIGNALGRAPH_YCONTROL, &CRadiosignalDlg::OnNMCustomdrawSignalgraphYcontrol)
+	ON_NOTIFY(NM_CUSTOMDRAW, ID_SIGNALGRAPH_XCONTROL, &CRadiosignalDlg::OnNMCustomdrawSignalgraphXcontrol)
+	ON_NOTIFY(NM_CUSTOMDRAW, ID_DPFGRAPH_YCONTROL2, &CRadiosignalDlg::OnNMCustomdrawDpfgraphYcontrol2)
+	ON_NOTIFY(NM_CUSTOMDRAW, ID_DPFGRAPH_XCONTROL2, &CRadiosignalDlg::OnNMCustomdrawDpfgraphXcontrol2)
+	ON_BN_CLICKED(ID_DPFGRAPH_LOGBUTTON, &CRadiosignalDlg::OnBnClickedDpfgraphLogbutton)
+	ON_BN_CLICKED(ID_SIGNALGRAPH_BMPBUTTON, &CRadiosignalDlg::OnBnClickedSignalgraphBmpbutton)
+	ON_BN_CLICKED(ID_DPFGRAPH_BMPBUTTON, &CRadiosignalDlg::OnBnClickedDpfgraphBmpbutton)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON1, &CRadiosignalDlg::OnBnClickedMfccolorbutton1)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON2, &CRadiosignalDlg::OnBnClickedMfccolorbutton2)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON3, &CRadiosignalDlg::OnBnClickedMfccolorbutton3)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON4, &CRadiosignalDlg::OnBnClickedMfccolorbutton4)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON5, &CRadiosignalDlg::OnBnClickedMfccolorbutton5)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON6, &CRadiosignalDlg::OnBnClickedMfccolorbutton6)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER1, &CRadiosignalDlg::OnNMCustomdrawSlider1)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER3, &CRadiosignalDlg::OnNMCustomdrawSlider3)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER2, &CRadiosignalDlg::OnNMCustomdrawSlider2)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER5, &CRadiosignalDlg::OnNMCustomdrawSlider5)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER4, &CRadiosignalDlg::OnNMCustomdrawSlider4)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER6, &CRadiosignalDlg::OnNMCustomdrawSlider6)
+	ON_BN_CLICKED(IDC_BUTTON2, &CRadiosignalDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CRadiosignalDlg::OnBnClickedButton3)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
-// Обработчики сообщений CKursachDlg
+// Обработчики сообщений CRadiosignalDlg
 
-BOOL CKursachDlg::OnInitDialog()
+BOOL CRadiosignalDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -202,73 +207,78 @@ BOOL CKursachDlg::OnInitDialog()
 	Fm_Spin.SetBuddy(&Fm_Edit);
 	M_Spin.SetBuddy(&M_Edit);
 
+	Lib_ValueConverter converter;
+
 	// Инициализация переменных
-	N = 500;
-	N_Edit.SetWindowTextW(L"500");
-	F = 2000000;
-	F_Edit.SetWindowTextW(L"2000000");
-	Fm = 400000;
-	Fm_Edit.SetWindowTextW(L"400000");
-	M = 5;
-	M_Edit.SetWindowTextW(L"5");
+	N = AfxGetApp()->GetProfileInt(L"Settings", L"N", 500);
+	N_Edit.SetWindowTextW(converter.intToCString(N));
+	F = AfxGetApp()->GetProfileInt(L"Settings", L"F", 2000000);
+	F_Edit.SetWindowTextW(converter.intToCString(F));
+	Fm = AfxGetApp()->GetProfileInt(L"Settings", L"Fm", 400000);;
+	Fm_Edit.SetWindowTextW(converter.intToCString(Fm));
+	M = AfxGetApp()->GetProfileInt(L"Settings", L"M", 5);
+	M_Edit.SetWindowTextW(converter.intToCString(M));
+
+	DPFGraph_IsLog = AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_IsLog", 0);
+	DPFGraph_LogControl.SetCheck(AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_IsLog", 0));
 
 	// Ползунок графика сигнала по Y
-	SignalGraph_YScale = 1500;
+	SignalGraph_YScale = AfxGetApp()->GetProfileInt(L"Settings", L"SignalGraph_YScale", 1500);
 	SignalGraph_YControl.SetRange(600, 3000);
-	SignalGraph_YControl.SetPos(1500);
+	SignalGraph_YControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"SignalGraph_YScale", 1500));
 
 	// Ползунок графика сигнала по X
-	SignalGraph_XScale = 300;
+	SignalGraph_XScale = AfxGetApp()->GetProfileInt(L"Settings", L"SignalGraph_XScale", 300);
 	SignalGraph_XControl.SetRange(200, 1000);
-	SignalGraph_XControl.SetPos(300);
+	SignalGraph_XControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"SignalGraph_XScale", 300));
 
 	// Ползунок графика ДПФ по Y
-	DPFGraph_YScale = 50;
+	DPFGraph_YScale = AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_YScale", 50);
 	DPFGraph_YControl.SetRange(50, 100);
-	DPFGraph_YControl.SetPos(50);
+	DPFGraph_YControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_YScale", 50));
 
 	// Ползунок графика ДПФ по X
-	DPFGraph_XScale = 300;
+	DPFGraph_XScale = AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_XScale", 300);
 	DPFGraph_XControl.SetRange(200, 1000);
-	DPFGraph_XControl.SetPos(300);
+	DPFGraph_XControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_XScale", 300));
 
 	// Ползунок ширины сигнала
-	SWidth = 2;
+	SWidth = AfxGetApp()->GetProfileInt(L"Settings", L"SWidth", 2);
 	SWidthControl.SetRange(1, 5);
-	SWidthControl.SetPos(2);
+	SWidthControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"SWidth", 2));
 
 	// Ползунок ширины ДПФ
-	DWidth = 2;
+	DWidth = AfxGetApp()->GetProfileInt(L"Settings", L"DWidth", 2);
 	DWidthControl.SetRange(1, 5);
-	DWidthControl.SetPos(2);
+	DWidthControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"DWidth", 2));
 
 	// Ползунок плотности координат сигнала x
-	SXDensity = 25;
+	SXDensity = AfxGetApp()->GetProfileInt(L"Settings", L"SXDensity", 25);
 	SXDensityControl.SetRange(10, 50);
-	SXDensityControl.SetPos(25);
+	SXDensityControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"SXDensity", 25));
 
 	// Ползунок плотности координат сигнала y
-	SYDensity = 50;
+	SYDensity = AfxGetApp()->GetProfileInt(L"Settings", L"SYDensity", 50);
 	SYDensityControl.SetRange(50, 100);
-	SYDensityControl.SetPos(50);
+	SYDensityControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"SYDensity", 50));
 
 	// Ползунок плотности координат ДПФ x
-	DXDensity = 25;
+	DXDensity = AfxGetApp()->GetProfileInt(L"Settings", L"DXDensity", 25);
 	DXDensityControl.SetRange(10, 50);
-	DXDensityControl.SetPos(25);
+	DXDensityControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"DXDensity", 25));
 
 	// Ползунок плотности координат ДПФ y
-	DYDensity = 25;
+	DYDensity = AfxGetApp()->GetProfileInt(L"Settings", L"DYDensity", 25);
 	DYDensityControl.SetRange(25, 50);
-	DYDensityControl.SetPos(25);
+	DYDensityControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"DYDensity", 25));
 
 	// Начальное задание цвета
-	SGColor = RGB(0, 0, 0);
-	DGColor = RGB(0, 0, 0);
-	SCColor = RGB(200, 200, 200);
-	DCColor = RGB(200, 200, 200);
-	SBColor = RGB(255, 255, 255);
-	DBColor = RGB(255, 255, 255);
+	SGColor = AfxGetApp()->GetProfileInt(L"Settings", L"SGColor", 0);
+	DGColor = AfxGetApp()->GetProfileInt(L"Settings", L"DGColor", 0);
+	SCColor = AfxGetApp()->GetProfileInt(L"Settings", L"SCColor", 13158600);
+	DCColor = AfxGetApp()->GetProfileInt(L"Settings", L"DCColor", 13158600);
+	SBColor = AfxGetApp()->GetProfileInt(L"Settings", L"SBColor", 16777215);
+	DBColor = AfxGetApp()->GetProfileInt(L"Settings", L"DBColor", 16777215);
 	SGColorControl.SetColor(SGColor);
 	DGColorControl.SetColor(DGColor);
 	SCColorControl.SetColor(SCColor);
@@ -277,42 +287,45 @@ BOOL CKursachDlg::OnInitDialog()
 	DBColorControl.SetColor(DBColor);
 
 	// Передача в класс построения графика сигнала
-	Graph_Signal.N = N;
-	Graph_Signal.F = F;
-	Graph_Signal.Fm = Fm;
-	Graph_Signal.M = M;
-	Graph_Signal.XScale = SignalGraph_XScale;
-	Graph_Signal.YScale = SignalGraph_YScale;
-	Graph_Signal.GColor = SGColor;
-	Graph_Signal.CColor = SCColor;
-	Graph_Signal.BColor = SBColor;
-	Graph_Signal.GWidth = SWidth;
-	Graph_Signal.CXDensity = SXDensity;
-	Graph_Signal.CYDensity = SYDensity;
+	Signal.N = N;
+	Signal.F = F;
+	Signal.Fm = Fm;
+	Signal.M = M;
+	Signal.XScale = SignalGraph_XScale;
+	Signal.YScale = SignalGraph_YScale;
+	Signal.GColor = SGColor;
+	Signal.CColor = SCColor;
+	Signal.BColor = SBColor;
+	Signal.GWidth = SWidth;
+	Signal.CXDensity = SXDensity;
+	Signal.CYDensity = SYDensity;
+	Signal.IsDPF = false;
 
 	// Передача в класс построения графика ДПФ
-	DPF_Signal.N = N;
-	DPF_Signal.F = F;
-	DPF_Signal.Fm = Fm;
-	DPF_Signal.M = M;
-	DPF_Signal.XScale = DPFGraph_XScale;
-	DPF_Signal.YScale = DPFGraph_YScale;
-	DPF_Signal.GColor = DGColor;
-	DPF_Signal.CColor = DCColor;
-	DPF_Signal.BColor = DBColor;
-	DPF_Signal.GWidth = DWidth;
-	DPF_Signal.CXDensity = DXDensity;
-	DPF_Signal.CYDensity = DYDensity;
+	DPF.N = N;
+	DPF.F = F;
+	DPF.Fm = Fm;
+	DPF.M = M;
+	DPF.XScale = DPFGraph_XScale;
+	DPF.YScale = DPFGraph_YScale;
+	DPF.GColor = DGColor;
+	DPF.CColor = DCColor;
+	DPF.BColor = DBColor;
+	DPF.GWidth = DWidth;
+	DPF.CXDensity = DXDensity;
+	DPF.CYDensity = DYDensity;
+	DPF.IsLog = DPFGraph_IsLog;
+	DPF.IsDPF = true;
 
 	// Назначение окошка для рисования
-	Graph_Signal.SubclassDlgItem(ID_SIGNALGRAPH_WINDOW, this);
-	DPF_Signal.SubclassDlgItem(ID_DPFGRAPH_WINDOW, this);
+	Signal.SubclassDlgItem(ID_SIGNALGRAPH_WINDOW, this);
+	DPF.SubclassDlgItem(ID_DPFGRAPH_WINDOW, this);
 
 
 	return TRUE;  // возврат значения TRUE, если фокус не передан элементу управления
 }
 
-void CKursachDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CRadiosignalDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -328,7 +341,7 @@ void CKursachDlg::OnSysCommand(UINT nID, LPARAM lParam)
 // При добавлении кнопки свертывания в диалоговое окно нужно воспользоваться приведенным ниже кодом,
 //  чтобы нарисовать значок.  Для приложений MFC, использующих модель документов или представлений,
 //  это автоматически выполняется рабочей областью.
-void CKursachDlg::OnPaint()
+void CRadiosignalDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -355,13 +368,13 @@ void CKursachDlg::OnPaint()
 
 // Система вызывает эту функцию для получения отображения курсора при перемещении
 //  свернутого окна.
-HCURSOR CKursachDlg::OnQueryDragIcon()
+HCURSOR CRadiosignalDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 // Что происходит по нажатию кнопки Enter
-void CKursachDlg::OnBnClickedOk()
+void CRadiosignalDlg::OnBnClickedOk()
 {
 	Lib_InteractiveBoxesData data;
 
@@ -380,67 +393,66 @@ void CKursachDlg::OnBnClickedOk()
 	DBColor = DBColorControl.GetColor();
 
 	// Передача в класс построения графика сигнала
-	Graph_Signal.N = N;
-	Graph_Signal.F = F;
-	Graph_Signal.Fm = Fm;
-	Graph_Signal.M = M;
-	Graph_Signal.XScale = SignalGraph_XScale;
-	Graph_Signal.YScale = SignalGraph_YScale;
-	Graph_Signal.GColor = SGColor;
-	Graph_Signal.CColor = SCColor;
-	Graph_Signal.BColor = SBColor;
-	Graph_Signal.CXDensity = SXDensity;
-	Graph_Signal.CYDensity = SYDensity;
+	Signal.N = N;
+	Signal.F = F;
+	Signal.Fm = Fm;
+	Signal.M = M;
+	Signal.XScale = SignalGraph_XScale;
+	Signal.YScale = SignalGraph_YScale;
+	Signal.GColor = SGColor;
+	Signal.CColor = SCColor;
+	Signal.BColor = SBColor;
+	Signal.CXDensity = SXDensity;
+	Signal.CYDensity = SYDensity;
 
 	// Передача в класс построения графика ДПФ
-	DPF_Signal.N = N;
-	DPF_Signal.F = F;
-	DPF_Signal.Fm = Fm;
-	DPF_Signal.M = M;
-	DPF_Signal.XScale = DPFGraph_XScale;
-	DPF_Signal.YScale = DPFGraph_YScale;
-	DPF_Signal.GColor = DGColor;
-	DPF_Signal.CColor = DCColor;
-	DPF_Signal.BColor = DBColor;
-	DPF_Signal.CXDensity = DXDensity;
-	DPF_Signal.CYDensity = DYDensity;
+	DPF.N = N;
+	DPF.F = F;
+	DPF.Fm = Fm;
+	DPF.M = M;
+	DPF.XScale = DPFGraph_XScale;
+	DPF.YScale = DPFGraph_YScale;
+	DPF.GColor = DGColor;
+	DPF.CColor = DCColor;
+	DPF.BColor = DBColor;
+	DPF.CXDensity = DXDensity;
+	DPF.CYDensity = DYDensity;
 
 	// Инвалидация окошек с графиком (перерисовывание)
-	Graph_Signal.Invalidate();
-	DPF_Signal.Invalidate();
+	Signal.Invalidate();
+	DPF.Invalidate();
 }
 
 #pragma region Обработка ввода N
 
 // Что происходит когда пропадает фокус с окна ввода F
-void CKursachDlg::OnEnKillfocusNEdit()
+void CRadiosignalDlg::OnEnKillfocusNEdit()
 {
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
 
-	Graph_Signal.N = N;  // Передача в класс построения графика сигнала
-	DPF_Signal.N = N;  // Передача в класс построения графика ДПФ
+	Signal.N = N;  // Передача в класс построения графика сигнала
+	DPF.N = N;  // Передача в класс построения графика ДПФ
 
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 // Что происходит когда нажимаются кнопочки N
-void CKursachDlg::OnDeltaposNSpin(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnDeltaposNSpin(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	Lib_InteractiveBoxesData data;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(N, 100, 1000, N_Edit, pNMUpDown->iDelta);  // Изменение N
 
-	Graph_Signal.N = N;  // Передача в класс построения графика сигнала
-	DPF_Signal.N = N;  // Передача в класс построения графика ДПФ
+	Signal.N = N;  // Передача в класс построения графика сигнала
+	DPF.N = N;  // Передача в класс построения графика ДПФ
 
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
-
+	Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 	*pResult = 0;
 }
 
@@ -449,33 +461,33 @@ void CKursachDlg::OnDeltaposNSpin(NMHDR* pNMHDR, LRESULT* pResult)
 #pragma region Обработка ввода F
 
 // Что происходит когда пропадает фокус с окна ввода F
-void CKursachDlg::OnEnKillfocusFEdit()
+void CRadiosignalDlg::OnEnKillfocusFEdit()
 {
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(F, 1000000, 4000000, F_Edit);  // Возвращение F в нормальные значения, если нужно
 
-	Graph_Signal.F = F;  // Передача в класс построения графика сигнала
-	DPF_Signal.F = F;  // Передача в класс построения графика ДПФ
+	Signal.F = F;  // Передача в класс построения графика сигнала
+	DPF.F = F;  // Передача в класс построения графика ДПФ
 
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 // Что происходит когда нажимаются кнопочки F
-void CKursachDlg::OnDeltaposFSpin(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnDeltaposFSpin(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	Lib_InteractiveBoxesData data;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(F, 1000000, 4000000, F_Edit, pNMUpDown->iDelta, 5000);  // Изменение F
 
-	Graph_Signal.F = F;  // Передача в класс построения графика сигнала
-	DPF_Signal.F = F;  // Передача в класс построения графика ДПФ
+	Signal.F = F;  // Передача в класс построения графика сигнала
+	DPF.F = F;  // Передача в класс построения графика ДПФ
 
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
 }
@@ -485,33 +497,33 @@ void CKursachDlg::OnDeltaposFSpin(NMHDR* pNMHDR, LRESULT* pResult)
 #pragma region Обработка ввода Fm
 
 // Что происходит когда пропадает фокус с окна ввода Fm
-void CKursachDlg::OnEnKillfocusFmEdit()
+void CRadiosignalDlg::OnEnKillfocusFmEdit()
 {
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
 
-	Graph_Signal.Fm = Fm;  // Передача в класс построения графика сигнала
-	DPF_Signal.Fm = Fm;  // Передача в класс построения графика ДПФ
+	Signal.Fm = Fm;  // Передача в класс построения графика сигнала
+	DPF.Fm = Fm;  // Передача в класс построения графика ДПФ
 
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 // Что происходит когда нажимаются кнопочки Fm
-void CKursachDlg::OnDeltaposFmSpin(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnDeltaposFmSpin(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	Lib_InteractiveBoxesData data;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(Fm, 100000, 900000, Fm_Edit, pNMUpDown->iDelta, 1000);  // Изменение Fm
 
-	Graph_Signal.Fm = Fm;  // Передача в класс построения графика сигнала
-	DPF_Signal.Fm = Fm;  // Передача в класс построения графика ДПФ
+	Signal.Fm = Fm;  // Передача в класс построения графика сигнала
+	DPF.Fm = Fm;  // Передача в класс построения графика ДПФ
 
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
 }
@@ -521,33 +533,35 @@ void CKursachDlg::OnDeltaposFmSpin(NMHDR* pNMHDR, LRESULT* pResult)
 #pragma region Обработка ввода M
 
 // Что происходит когда пропадает фокус с окна ввода M
-void CKursachDlg::OnEnKillfocusMEdit()
+void CRadiosignalDlg::OnEnKillfocusMEdit()
 {
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
 	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
 
-	Graph_Signal.M = M;  // Передача в класс построения графика сигнала
-	DPF_Signal.M = M;  // Передача в класс построения графика ДПФ
+	Signal.M = M;  // Передача в класс построения графика сигнала
+	DPF.M = M;  // Передача в класс построения графика ДПФ
 
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
+
 }
 
 // Что происходит когда нажимаются кнопочки M
-void CKursachDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	Lib_InteractiveBoxesData data;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
 	data.IntSpinChange(M, 0, 10, M_Edit, pNMUpDown->iDelta);  // Изменение M
 
-	Graph_Signal.M = M;  // Передача в класс построения графика сигнала
-	DPF_Signal.M = M;  // Передача в класс построения графика ДПФ
+	Signal.M = M;  // Передача в класс построения графика сигнала
+	DPF.M = M;  // Передача в класс построения графика ДПФ
 
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	Signal.Invalidate();  // Перерисовывание графика сигнала
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
+	RegistrySave();
 
 	*pResult = 0;
 }
@@ -557,25 +571,25 @@ void CKursachDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 #pragma region Обработка масштаба графика сигнала
 
 // Что происходит когда двигают ползунок Y
-void CKursachDlg::OnNMCustomdrawSignalgraphYcontrol(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawSignalgraphYcontrol(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
-	Graph_Signal.YScale = SignalGraph_YScale;  // Передача в класс
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	Signal.YScale = SignalGraph_YScale;  // Передача в класс
+	Signal.Invalidate();  // Перерисовывание графика сигнала
 
 	*pResult = 0;
 }
 
 // Что происходит когда двигают ползунок X
-void CKursachDlg::OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
-	Graph_Signal.XScale = SignalGraph_XScale;  // Передача в класс
-	Graph_Signal.Invalidate();  // Перерисовывание графика сигнала
+	Signal.XScale = SignalGraph_XScale;  // Передача в класс
+	Signal.Invalidate();  // Перерисовывание графика сигнала
 
 	*pResult = 0;
 }
@@ -585,42 +599,42 @@ void CKursachDlg::OnNMCustomdrawSignalgraphXcontrol(NMHDR* pNMHDR, LRESULT* pRes
 #pragma region Обработка масштаба графика ДПФ
 
 // Что происходит когда двигают ползунок Y
-void CKursachDlg::OnNMCustomdrawDpfgraphYcontrol2(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawDpfgraphYcontrol2(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
-	DPF_Signal.YScale = DPFGraph_YScale;  // Передача в класс
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	DPF.YScale = DPFGraph_YScale;  // Передача в класс
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
 }
 
 // Что происходит когда двигают ползунок X
-void CKursachDlg::OnNMCustomdrawDpfgraphXcontrol2(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawDpfgraphXcontrol2(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 
 	UpdateData();  // Обновление информации
-	DPF_Signal.XScale = DPFGraph_XScale;  // Передача в класс
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	DPF.XScale = DPFGraph_XScale;  // Передача в класс
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 
 	*pResult = 0;
 }
 
 // Что происходит когда нажимают на галочку логарифмирования
-void CKursachDlg::OnBnClickedDpfgraphLogbutton()
+void CRadiosignalDlg::OnBnClickedDpfgraphLogbutton()
 {
 	UpdateData();  // Обновление информации
-	DPF_Signal.IsLog=DPFGraph_IsLog;  // Передача в глобальное значение
-	DPF_Signal.Invalidate();  // Перерисовывание графика ДПФ
+	DPF.IsLog=DPFGraph_IsLog;  // Передача в глобальное значение
+	DPF.Invalidate();  // Перерисовывание графика ДПФ
 }
 
 #pragma endregion
 
 #pragma region Вывод в картинку
 
-void CKursachDlg::OnBnClickedSignalgraphBmpbutton()
+void CRadiosignalDlg::OnBnClickedSignalgraphBmpbutton()
 {
 	CWnd* pWnd = GetDlgItem(ID_SIGNALGRAPH_WINDOW);
 
@@ -672,7 +686,7 @@ void CKursachDlg::OnBnClickedSignalgraphBmpbutton()
 
 
 
-void CKursachDlg::OnBnClickedDpfgraphBmpbutton()
+void CRadiosignalDlg::OnBnClickedDpfgraphBmpbutton()
 {
 	CWnd* pWnd = GetDlgItem(ID_DPFGRAPH_WINDOW);
 
@@ -725,82 +739,82 @@ void CKursachDlg::OnBnClickedDpfgraphBmpbutton()
 
 #pragma region Обработка цвета
 
-void CKursachDlg::OnBnClickedMfccolorbutton1()
+void CRadiosignalDlg::OnBnClickedMfccolorbutton1()
 {
 	// Получение цвета
 	SGColor = SGColorControl.GetColor();
 
-	Graph_Signal.GColor = SGColor;
-	Graph_Signal.Invalidate();
+	Signal.GColor = SGColor;
+	Signal.Invalidate();
 }
 
-void CKursachDlg::OnBnClickedMfccolorbutton2()
+void CRadiosignalDlg::OnBnClickedMfccolorbutton2()
 {
 	// Получение цвета
 	SCColor = SCColorControl.GetColor();
 
-	Graph_Signal.CColor = SCColor;
-	Graph_Signal.Invalidate();
+	Signal.CColor = SCColor;
+	Signal.Invalidate();
 }
 
-void CKursachDlg::OnBnClickedMfccolorbutton3()
+void CRadiosignalDlg::OnBnClickedMfccolorbutton3()
 {	
 	// Получение цвета
 	SBColor = SBColorControl.GetColor();
 
-	Graph_Signal.BColor = SBColor;
-	Graph_Signal.Invalidate();
+	Signal.BColor = SBColor;
+	Signal.Invalidate();
 }
 
-void CKursachDlg::OnBnClickedMfccolorbutton4()
+void CRadiosignalDlg::OnBnClickedMfccolorbutton4()
 {
 	// Получение цвета
 	DGColor = DGColorControl.GetColor();
 
-	DPF_Signal.GColor = DGColor;
-	DPF_Signal.Invalidate();
+	DPF.GColor = DGColor;
+	DPF.Invalidate();
 }
 
-void CKursachDlg::OnBnClickedMfccolorbutton5()
+void CRadiosignalDlg::OnBnClickedMfccolorbutton5()
 {
 	// Получение цвета
 	DCColor = DCColorControl.GetColor();
 
-	DPF_Signal.CColor = DCColor;
-	DPF_Signal.Invalidate();
+	DPF.CColor = DCColor;
+	DPF.Invalidate();
 }
 
-void CKursachDlg::OnBnClickedMfccolorbutton6()
+void CRadiosignalDlg::OnBnClickedMfccolorbutton6()
 {
 	// Получение цвета
 	DBColor = DBColorControl.GetColor();
 
-	DPF_Signal.BColor = DBColor;
-	DPF_Signal.Invalidate();
+	DPF.BColor = DBColor;
+	DPF.Invalidate();
 }
 
 #pragma endregion
 
 #pragma region Ширина графиков
 
-void CKursachDlg::OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	
 	UpdateData(); // Обновление информации
-	Graph_Signal.GWidth = SWidth;
-	Graph_Signal.Invalidate();
+	Signal.GWidth = SWidth;
+	Signal.Invalidate();
 
 	*pResult = 0;
 }
 
-void CKursachDlg::OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	
 	UpdateData(); // Обновление информации
-	DPF_Signal.GWidth = DWidth;
-	DPF_Signal.Invalidate();
+	DPF.GWidth = DWidth;
+	DPF.Invalidate();
 
 	*pResult = 0;
 }
@@ -809,48 +823,131 @@ void CKursachDlg::OnNMCustomdrawSlider3(NMHDR* pNMHDR, LRESULT* pResult)
 
 #pragma region Плотность координат
 
-void CKursachDlg::OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	
 	UpdateData();
-	Graph_Signal.CXDensity = SXDensity;
-	Graph_Signal.Invalidate();
+	Signal.CXDensity = SXDensity;
+	Signal.Invalidate();
 
 	*pResult = 0;
 }
 
-void CKursachDlg::OnNMCustomdrawSlider5(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawSlider5(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	
 	UpdateData();
-	Graph_Signal.CYDensity = SYDensity;
-	Graph_Signal.Invalidate();
+	Signal.CYDensity = SYDensity;
+	Signal.Invalidate();
 
 	*pResult = 0;
 }
 
-void CKursachDlg::OnNMCustomdrawSlider4(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawSlider4(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	
 	UpdateData();
-	DPF_Signal.CXDensity = DXDensity;
-	DPF_Signal.Invalidate();
+	DPF.CXDensity = DXDensity;
+	DPF.Invalidate();
 
 	*pResult = 0;
 }
 
-void CKursachDlg::OnNMCustomdrawSlider6(NMHDR* pNMHDR, LRESULT* pResult)
+void CRadiosignalDlg::OnNMCustomdrawSlider6(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	
 	UpdateData();
-	DPF_Signal.CYDensity = DYDensity;
-	DPF_Signal.Invalidate();
+	DPF.CYDensity = DYDensity;
+	DPF.Invalidate();
 
 	*pResult = 0;
 }
 
 #pragma endregion
+
+// Сохранение в реестр Windows
+void CRadiosignalDlg::RegistrySave()
+{
+	// Обновление информации
+	UpdateData();
+
+	// Обновление цвета
+	DBColor = DBColorControl.GetColor();
+	SBColor = SBColorControl.GetColor();
+	DGColor = DGColorControl.GetColor();
+	SGColor = SGColorControl.GetColor();
+	DCColor = DCColorControl.GetColor();
+	SCColor = SCColorControl.GetColor();
+
+	// Внесение цвета в реестр
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DBColor"), DBColor);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SBColor"), SBColor);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DGColor"), DGColor);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SGColor"), SGColor);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DCColor"), DCColor);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SCColor"), SCColor);
+
+	// Внесение переменных в реестр
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("N"), N);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("F"), F);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("Fm"), Fm);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("M"), M);
+
+	// Внесение масштаба и состояния логарифма в реестр
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SignalGraph_XScale"), SignalGraph_XScale);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SignalGraph_YScale"), SignalGraph_YScale);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_XScale"), DPFGraph_XScale);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_YScale"), DPFGraph_YScale);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_IsLog"), DPFGraph_IsLog);
+
+	// Внесение координат и ширины в реестр
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SWidth"), SWidth);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DWidth"), DWidth);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SXDensity"), SXDensity);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SYDensity"), SYDensity);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DXDensity"), DXDensity);
+	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DYDensity"), DYDensity);
+
+}
+
+// Кнопка сохранения конфигурации
+void CRadiosignalDlg::OnBnClickedButton2()
+{
+	RegistrySave();
+}
+
+// Кнопка сброса конфигурации
+void CRadiosignalDlg::OnBnClickedButton3()
+{
+	AfxGetApp()->DelRegTree(HKEY_CURRENT_USER, _T("SOFTWARE\\russkiylis\\Radiosignal\\Settings"));  // Удаление реестра
+	IsRestart = true; // Нам нужен рестарт
+	this->SendMessage(WM_CLOSE);  // Вызов функции закрытия
+}
+
+// Перезапуск программы
+void CRadiosignalDlg::OnClose()
+{
+	if (IsRestart)  // Если рестарт то стартуем нашу программу заново
+	{
+		// Путь к программе
+		wchar_t ProgramPath[100];
+		GetModuleFileName(NULL, ProgramPath, 100);
+
+		STARTUPINFO StartInfo;
+		PROCESS_INFORMATION procStruct;
+		memset(&StartInfo, 0, sizeof(STARTUPINFO));
+		StartInfo.cb = sizeof(STARTUPINFO);
+
+		if (CreateProcess((LPCTSTR)ProgramPath, NULL, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &StartInfo, &procStruct))
+		{
+			CloseHandle(procStruct.hProcess);
+			CloseHandle(procStruct.hThread);
+		}
+	}
+
+	CDialogEx::OnClose();
+}

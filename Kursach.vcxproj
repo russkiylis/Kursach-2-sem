@@ -22,8 +22,9 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{FFC9CC1F-3D09-44C7-9EDE-ACBEFBF484D3}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>Kursach</RootNamespace>
+    <RootNamespace>Radiosignal</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Radiosignal</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -185,8 +186,8 @@
   <ItemGroup>
     <ClInclude Include="GraphPaint.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Kursach.h" />
-    <ClInclude Include="KursachDlg.h" />
+    <ClInclude Include="Radiosignal.h" />
+    <ClInclude Include="RadiosignalDlg.h" />
     <ClInclude Include="Lib.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
@@ -194,8 +195,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphPaint.cpp" />
-    <ClCompile Include="Kursach.cpp" />
-    <ClCompile Include="KursachDlg.cpp" />
+    <ClCompile Include="Radiosignal.cpp" />
+    <ClCompile Include="RadiosignalDlg.cpp" />
     <ClCompile Include="Lib.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -14,14 +14,14 @@
 #include <math.h>
 #include <vector>
 
-// CKursachApp:
+// CRadiosignalApp:
 // Сведения о реализации этого класса: Kursach.cpp
 //
 
-class CKursachApp : public CWinApp
+class CRadiosignalApp : public CWinApp
 {
 public:
-	CKursachApp();
+	CRadiosignalApp();
 
 // Переопределение
 public:
@@ -32,4 +32,4 @@ public:
 	DECLARE_MESSAGE_MAP()
 };
 
-extern CKursachApp theApp;
+extern CRadiosignalApp theApp;
