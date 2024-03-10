@@ -38,8 +38,27 @@ void CSignalPaint::OnPaint()
 
 	dc.FillSolidRect(rc, BColor);  // Заполнение фона
 
+#pragma region Рисование координат
+	CPen CoordPen(PS_DOT, 1, CColor);  // Создание пера координат
+	HGDIOBJ old1 = dc.SelectObject(CoordPen);  // Выбор пера координат
 
 
+	std::vector<CoordLine> xLines, yLines;  // Автоматический динамический массив линий координат
+	converter.GenerateXCoordLines(rc, xLines);
+
+	for (int i = 1; i < xLines.size(); i++) {
+		dc.MoveTo(CPoint(xLines[i].coord, 0));
+		dc.LineTo(CPoint(xLines[i].coord, rc.Height()));
+	}
+
+	converter.GenerateYCoordLines(rc, yLines, false);
+	for (int i = 1; i < yLines.size(); i++) {
+		dc.MoveTo(CPoint(0, yLines[i].coord));
+		dc.LineTo(CPoint(rc.Width(), yLines[i].coord));
+	}
+#pragma endregion
+
+#pragma region Рисование графика
 	CPen GraphPen(PS_SOLID, GWidth, GColor);  // Создание пера графика
 	HGDIOBJ old = dc.SelectObject(GraphPen);  // Выбор пера графика
 
@@ -52,12 +71,9 @@ void CSignalPaint::OnPaint()
 	for (int i = 1; i < points.size(); i++) {
 		dc.LineTo(points[i]);
 	}
+#pragma endregion
 
-
-
-	CPen CoordPen(PS_DOT, 1, CColor);  // Создание пера координат
-	HGDIOBJ old1 = dc.SelectObject(CoordPen);  // Выбор пера координат
-
+#pragma region Рисование текста
 	// Шрифт для Х координаты
 	CFont Xfont;
 	Xfont.CreateFont(
@@ -76,17 +92,36 @@ void CSignalPaint::OnPaint()
 		DEFAULT_PITCH | FF_SWISS,  //nPitchAndFamily
 		_T("Arial")  //lpszFacename
 	);
-	CFont* def_font = dc.SelectObject(&Xfont);  // Выбор шрифта
 
-
-	std::vector<CoordLine> xLines, yLines;  // Автоматический динамический массив линий координат
-	converter.GenerateXCoordLines(rc, xLines);
-
+	//Шрифт для Y координаты
+	CFont Yfont;
+	Yfont.CreateFont(
+		12,  //nHeight
+		0,  //nWidth
+		0,  //nEscapement
+		0,  //nOrientation
+		FW_NORMAL,  //nWeight
+		FALSE,  //bItalic
+		FALSE,  //bUnderline
+		0,  //cStrikeOut
+		ANSI_CHARSET,  //nCharSet
+		OUT_DEFAULT_PRECIS,  //nOutPrecision
+		CLIP_DEFAULT_PRECIS,  //nClipPrecision
+		DEFAULT_QUALITY,  //nQuality
+		DEFAULT_PITCH | FF_SWISS,  //nPitchAndFamily
+		_T("Arial")  //lpszFacename
+	);
+	dc.SetTextColor(CColor);
+	CFont* def_font1 = dc.SelectObject(&Xfont);  // Выбор шрифта
 	for (int i = 1; i < xLines.size(); i++) {
-		dc.MoveTo(CPoint(xLines[i].coord, 0));
-		dc.LineTo(CPoint(xLines[i].coord, rc.Height()));
-		dc.TextOut(xLines[i].coord-10, rc.Height() - 10, xLines[i].value);
+		dc.TextOut(xLines[i].coord - 10, rc.Height() - 10, xLines[i].value);
 	}
+
+	CFont* def_font = dc.SelectObject(&Yfont);  // Выбор шрифта
+	for (int i = 1; i < yLines.size()-1; i++) {
+		dc.TextOut(5, yLines[i].coord - 5, yLines[i].value);
+	}
+#pragma endregion
 }
 
 // Превращение CSignalPaint в динамический класс (для того чтобы втыкать переменные)
@@ -128,6 +163,27 @@ void CDPFPaint::OnPaint()
 
 
 
+#pragma region Рисование координат
+	CPen CoordPen(PS_DOT, 1, CColor);  // Создание пера координат
+	HGDIOBJ old1 = dc.SelectObject(CoordPen);  // Выбор пера координат
+
+
+	std::vector<CoordLine> xLines, yLines;  // Автоматический динамический массив линий координат
+	converter.GenerateXCoordLines(rc, xLines);
+
+	for (int i = 1; i < xLines.size(); i++) {
+		dc.MoveTo(CPoint(xLines[i].coord, 0));
+		dc.LineTo(CPoint(xLines[i].coord, rc.Height()));
+	}
+
+	converter.GenerateYCoordLines(rc, yLines, true);
+	for (int i = 1; i < yLines.size(); i++) {
+		dc.MoveTo(CPoint(0, yLines[i].coord));
+		dc.LineTo(CPoint(rc.Width(), yLines[i].coord));
+	}
+#pragma endregion
+
+#pragma region Рисование графика
 	CPen GraphPen(PS_SOLID, GWidth, GColor);  // Создание пера графика
 	HGDIOBJ old = dc.SelectObject(GraphPen);  // Выбор пера графика
 
@@ -142,15 +198,12 @@ void CDPFPaint::OnPaint()
 
 	// Собственно рисование графика
 	for (int i = 1; i < points.size(); i++) {
-		dc.MoveTo(points[i]);
-		dc.LineTo(CPoint(points[i].x, rc.Height()));
+			dc.MoveTo(points[i]);
+			dc.LineTo(CPoint(points[i].x, rc.Height()));
 	}
+#pragma endregion
 
-
-
-	CPen CoordPen(PS_DOT, 1, CColor);  // Создание пера координат
-	HGDIOBJ old1 = dc.SelectObject(CoordPen);  // Выбор пера координат
-
+#pragma region Рисование текста
 	// Шрифт для Х координаты
 	CFont Xfont;
 	Xfont.CreateFont(
@@ -169,15 +222,34 @@ void CDPFPaint::OnPaint()
 		DEFAULT_PITCH | FF_SWISS,  //nPitchAndFamily
 		_T("Arial")  //lpszFacename
 	);
-	CFont* def_font = dc.SelectObject(&Xfont);  // Выбор шрифта
 
-
-	std::vector<CoordLine> xLines, yLines;  // Автоматический динамический массив линий координат
-	converter.GenerateXCoordLines(rc, xLines);
-
+	//Шрифт для Y координаты
+	CFont Yfont;
+	Yfont.CreateFont(
+		12,  //nHeight
+		0,  //nWidth
+		0,  //nEscapement
+		0,  //nOrientation
+		FW_NORMAL,  //nWeight
+		FALSE,  //bItalic
+		FALSE,  //bUnderline
+		0,  //cStrikeOut
+		ANSI_CHARSET,  //nCharSet
+		OUT_DEFAULT_PRECIS,  //nOutPrecision
+		CLIP_DEFAULT_PRECIS,  //nClipPrecision
+		DEFAULT_QUALITY,  //nQuality
+		DEFAULT_PITCH | FF_SWISS,  //nPitchAndFamily
+		_T("Arial")  //lpszFacename
+	);
+	dc.SetTextColor(CColor);
+	CFont* def_font1 = dc.SelectObject(&Xfont);  // Выбор шрифта
 	for (int i = 1; i < xLines.size(); i++) {
-		dc.MoveTo(CPoint(xLines[i].coord, 0));
-		dc.LineTo(CPoint(xLines[i].coord, rc.Height()));
-		dc.TextOut(xLines[i].coord - 10, 50, xLines[i].value);
+		dc.TextOut(xLines[i].coord - 10, 40, xLines[i].value);
 	}
+
+	CFont* def_font = dc.SelectObject(&Yfont);  // Выбор шрифта
+	for (int i = 1; i < yLines.size()-1; i++) {
+		dc.TextOut(5, yLines[i].coord - 5, yLines[i].value);
+	}
+#pragma endregion
 }

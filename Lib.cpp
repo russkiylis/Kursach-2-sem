@@ -135,28 +135,28 @@ void Lib_GraphConverter::GenerateDPFGraphPoints(CRect& rc, std::vector<CPoint>& 
 		DPFCalc.x = double(i)/10000000;  // Посчитанная точка х
 		DPFCalc.y = sqrt(pow(cos_sum,2)+pow(sin_sum,2));  // Посчитанная точка у (корень из суммы квадратов синусной и косинусной составляющей)
 
-		CPoint point = GenerateDrawablePoint(rc, DPFCalc, 0, rc.Height()-1, isLog);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
+		CPoint point = GenerateDrawablePoint(rc, DPFCalc, 0, rc.Height(), isLog);  // Берём посчитанную точку и преобразуем её в точку, которую можно отобразить в окне
 
 		vec.push_back(point);  // Засовываем точку в вектор точек
 	}
 
-	if (isLog) {
-		int max=0;
-		LogDelta = 0;
+	//if (isLog) {
+	//	int max=0;
+	//	LogDelta = 0;
 
-		for (int i = 0; i < N; i++) {
-			if (vec[i].y > max) max = vec[i].y;
-		}
+	//	for (int i = 0; i < N; i++) {
+	//		if (vec[i].y > max) max = vec[i].y;
+	//	}
 
 
-		if (max > rc.Height()) {
-			LogDelta = max - rc.Height();
-		}
+	//	if (max > rc.Height()) {
+	//		LogDelta = max - rc.Height();
+	//	}
 
-		for (int i = 0; i < N; i++) {
-			vec[i].y -= LogDelta;
-		}
-	}
+	//	for (int i = 0; i < N; i++) {
+	//		vec[i].y -= LogDelta;
+	//	}
+	//}
 }
 
 void Lib_GraphConverter::GenerateXCoordLines(CRect& rc, std::vector<CoordLine>& vec)
@@ -165,8 +165,51 @@ void Lib_GraphConverter::GenerateXCoordLines(CRect& rc, std::vector<CoordLine>& 
 
 		CoordLine cl;
 		cl.coord = i- double(XScale) / 100;
-		double a = i / double(XScale);
 		cl.value.Format(_T("%.f e-7"), i / double(XScale) * 100);
 		vec.push_back(cl);
+	}
+}
+
+void Lib_GraphConverter::GenerateYCoordLines(CRect& rc, std::vector<CoordLine>& vec, bool isDPF)
+{
+	if (!isDPF) {
+		for (double i = rc.Height() / 2; i < rc.Height(); i += double(YDensity) * double(YScale) / 3000) {
+
+			CoordLine cl, mcl;
+			cl.coord = i;
+			cl.value.Format(_T("%.2f"), -(i - (rc.Height() / 2)) * 30 / YScale);
+			vec.push_back(cl);
+		}
+
+		for (double i = rc.Height() / 2; i > 0; i -= double(YDensity) * double(YScale) / 3000) {
+
+			CoordLine cl, mcl;
+			cl.coord = i;
+			cl.value.Format(_T("%.2f"), -(i - (rc.Height() / 2)) * 30 / YScale);
+			if (cl.value == L"-0.00") cl.value = L"0.00";
+			vec.push_back(cl);
+		}
+	}
+	else{
+		if (!isLog) {
+			for (double i = rc.Height(); i > 0; i -= double(YDensity) * double(YScale) / 30) {
+				CoordLine cl;
+				cl.coord = i;
+				cl.value.Format(_T("%.2f"), -(i - rc.Height()) / YScale*30);
+				if (cl.value == L"-0.00") cl.value = L"";
+				vec.push_back(cl);
+			}
+		}
+		else {
+			for (double i = rc.Height(); i > 0; i -= double(YDensity) * double(YScale)/30) {
+				CoordLine cl;
+				cl.coord = i;
+
+				double k = -(i - rc.Height()) / (double)YScale;
+				cl.value.Format(_T("%.2f"), pow(double(10), k));
+				if (cl.value == L"-0.00") cl.value = L"";
+				vec.push_back(cl);
+			}
+		}
 	}
 }

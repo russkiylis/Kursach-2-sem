@@ -224,7 +224,7 @@ BOOL CKursachDlg::OnInitDialog()
 
 	// Ползунок графика ДПФ по Y
 	DPFGraph_YScale = 50;
-	DPFGraph_YControl.SetRange(10, 100);
+	DPFGraph_YControl.SetRange(50, 100);
 	DPFGraph_YControl.SetPos(50);
 
 	// Ползунок графика ДПФ по X
@@ -248,9 +248,9 @@ BOOL CKursachDlg::OnInitDialog()
 	SXDensityControl.SetPos(25);
 
 	// Ползунок плотности координат сигнала y
-	SYDensity = 25;
-	SYDensityControl.SetRange(10, 50);
-	SYDensityControl.SetPos(25);
+	SYDensity = 50;
+	SYDensityControl.SetRange(50, 100);
+	SYDensityControl.SetPos(50);
 
 	// Ползунок плотности координат ДПФ x
 	DXDensity = 25;
@@ -259,7 +259,7 @@ BOOL CKursachDlg::OnInitDialog()
 
 	// Ползунок плотности координат ДПФ y
 	DYDensity = 25;
-	DYDensityControl.SetRange(10, 50);
+	DYDensityControl.SetRange(25, 50);
 	DYDensityControl.SetPos(25);
 
 	// Начальное задание цвета

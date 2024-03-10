@@ -79,6 +79,9 @@ public:
 	// Генерация линий координат по х
 	void GenerateXCoordLines(CRect& rc, std::vector<CoordLine>& vec);
 
+	// Генерация линий координат по y
+	void GenerateYCoordLines(CRect& rc, std::vector<CoordLine>& vec, bool isDPF);
+
 	// Переменные
 
 	int XScale;
