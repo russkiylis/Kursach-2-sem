@@ -11,6 +11,18 @@
 #include <initguid.h>
 DEFINE_GUID(ImageFormatBMP, 0xb96b3cab, 0x0728, 0x11d3, 0x9d, 0x7b,
 	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
+DEFINE_GUID(ImageFormatEMF, 0xb96b3cac, 0x0728, 0x11d3, 0x9d, 0x7b,
+	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
+DEFINE_GUID(ImageFormatWMF, 0xb96b3cad, 0x0728, 0x11d3, 0x9d, 0x7b,
+	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
+DEFINE_GUID(ImageFormatJPEG, 0xb96b3cae, 0x0728, 0x11d3, 0x9d, 0x7b,
+	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
+DEFINE_GUID(ImageFormatPNG, 0xb96b3caf, 0x0728, 0x11d3, 0x9d, 0x7b,
+	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
+DEFINE_GUID(ImageFormatGIF, 0xb96b3cb0, 0x0728, 0x11d3, 0x9d, 0x7b,
+	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
+DEFINE_GUID(ImageFormatTIFF, 0xb96b3cb1, 0x0728, 0x11d3, 0x9d, 0x7b,
+	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
 
 bool IsRestart = false;
 
@@ -656,10 +668,10 @@ void CRadiosignalDlg::OnBnClickedSignalgraphBmpbutton()
 	memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &winDC, 0, 0, SRCCOPY);
 	memDC.SelectObject(pOld);
 
-	static TCHAR szFilter[] = _T("BMP Files (*.bmp)|*.bmp|")
-		_T("PNG Files (*.png)|*.png|GIF Files (*.gif)|*.gif|")
-		_T("JPG Files (*.jpg)|*.jpg|All Files (*.*)|*.*||");
-	CFileDialog dlg(FALSE, _T(".bmp"), NULL, 6UL, szFilter);
+	static TCHAR szFilter[] = _T("Рисунки BMP (*.bmp)|*.bmp|")
+		_T("Рисунки PNG (*.png)|*.png|Рисунки GIF (*.gif)|*.gif|")
+		_T("Рисунки JPG (*.jpg)|*.jpg|Все файлы (*.*)|*.*||");
+	CFileDialog dlg(FALSE, _T(".bmp"), _T("График сигнала"), 6UL, szFilter);
 	if (IDOK == dlg.DoModal())
 	{
 		CImage image;
@@ -667,7 +679,13 @@ void CRadiosignalDlg::OnBnClickedSignalgraphBmpbutton()
 		CString strFull = dlg.GetOFN().lpstrFile;
 		HRESULT hr;
 
-		if (-1 != strFull.Find(_T(".bmp")))
+		if (-1 != strFull.Find(_T(".png")))
+			hr = image.Save(strFull, ImageFormatPNG);
+		else if (-1 != strFull.Find(_T(".jpg")))
+			hr = image.Save(strFull, ImageFormatJPEG);
+		else if (-1 != strFull.Find(_T(".gif")))
+			hr = image.Save(strFull, ImageFormatGIF);
+		else if (-1 != strFull.Find(_T(".bmp")))
 			hr = image.Save(strFull, ImageFormatBMP);
 		else
 		{
@@ -677,7 +695,7 @@ void CRadiosignalDlg::OnBnClickedSignalgraphBmpbutton()
 		if (FAILED(hr))
 		{
 			CString strErr;
-				strErr.Format(L" Couldn't Save File: %s, %x ", (LPCTSTR)strFull,
+				strErr.Format(L" Невозможно сохранить файл: %s, %x ", (LPCTSTR)strFull,
 					hr);
 			AfxMessageBox(strErr, MB_OK | MB_ICONERROR);
 		}
@@ -708,9 +726,11 @@ void CRadiosignalDlg::OnBnClickedDpfgraphBmpbutton()
 	memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &winDC, 0, 0, SRCCOPY);
 	memDC.SelectObject(pOld);
 
-	static TCHAR szFilter[] = _T("BMP Files (*.bmp)|*.bmp|");
+	static TCHAR szFilter[] = _T("Рисунки BMP (*.bmp)|*.bmp|")
+		_T("Рисунки PNG (*.png)|*.png|Рисунки GIF (*.gif)|*.gif|")
+		_T("Рисунки JPG (*.jpg)|*.jpg|Все файлы (*.*)|*.*||");
 
-	CFileDialog dlg(FALSE, _T(".bmp"), NULL, 6UL, szFilter);
+	CFileDialog dlg(FALSE, _T(".bmp"), _T("График модуля ДПФ"), 6UL, szFilter);
 	if (IDOK == dlg.DoModal())
 	{
 		CImage image;
@@ -718,7 +738,13 @@ void CRadiosignalDlg::OnBnClickedDpfgraphBmpbutton()
 		CString strFull = dlg.GetOFN().lpstrFile;
 		HRESULT hr;
 
-		if (-1 != strFull.Find(_T(".bmp")))
+		if (-1 != strFull.Find(_T(".png")))
+			hr = image.Save(strFull, ImageFormatPNG);
+		else if (-1 != strFull.Find(_T(".jpg")))
+			hr = image.Save(strFull, ImageFormatJPEG);
+		else if (-1 != strFull.Find(_T(".gif")))
+			hr = image.Save(strFull, ImageFormatGIF);
+		else if (-1 != strFull.Find(_T(".bmp")))
 			hr = image.Save(strFull, ImageFormatBMP);
 		else
 		{
@@ -728,7 +754,7 @@ void CRadiosignalDlg::OnBnClickedDpfgraphBmpbutton()
 		if (FAILED(hr))
 		{
 			CString strErr;
-			strErr.Format(L" Couldn't Save File: %s, %x ", (LPCTSTR)strFull,
+			strErr.Format(L" Невозможно сохранить файл: %s, %x ", (LPCTSTR)strFull,
 				hr);
 			AfxMessageBox(strErr, MB_OK | MB_ICONERROR);
 		}
@@ -872,6 +898,7 @@ void CRadiosignalDlg::OnNMCustomdrawSlider6(NMHDR* pNMHDR, LRESULT* pResult)
 // Сохранение в реестр Windows
 void CRadiosignalDlg::RegistrySave()
 {
+	HRESULT hr;
 	// Обновление информации
 	UpdateData();
 
@@ -884,34 +911,45 @@ void CRadiosignalDlg::RegistrySave()
 	SCColor = SCColorControl.GetColor();
 
 	// Внесение цвета в реестр
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DBColor"), DBColor);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SBColor"), SBColor);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DGColor"), DGColor);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SGColor"), SGColor);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DCColor"), DCColor);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SCColor"), SCColor);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DBColor"), DBColor);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SBColor"), SBColor);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DGColor"), DGColor);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SGColor"), SGColor);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DCColor"), DCColor);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SCColor"), SCColor);
 
 	// Внесение переменных в реестр
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("N"), N);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("F"), F);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("Fm"), Fm);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("M"), M);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("N"), N);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("F"), F);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("Fm"), Fm);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("M"), M);
 
 	// Внесение масштаба и состояния логарифма в реестр
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SignalGraph_XScale"), SignalGraph_XScale);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SignalGraph_YScale"), SignalGraph_YScale);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_XScale"), DPFGraph_XScale);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_YScale"), DPFGraph_YScale);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_IsLog"), DPFGraph_IsLog);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SignalGraph_XScale"), SignalGraph_XScale);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SignalGraph_YScale"), SignalGraph_YScale);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_XScale"), DPFGraph_XScale);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_YScale"), DPFGraph_YScale);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DPFGraph_IsLog"), DPFGraph_IsLog);
 
 	// Внесение координат и ширины в реестр
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SWidth"), SWidth);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DWidth"), DWidth);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SXDensity"), SXDensity);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SYDensity"), SYDensity);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DXDensity"), DXDensity);
-	AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DYDensity"), DYDensity);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SWidth"), SWidth);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DWidth"), DWidth);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SXDensity"), SXDensity);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SYDensity"), SYDensity);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DXDensity"), DXDensity);
+	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("DYDensity"), DYDensity);
 
+	if (FAILED(hr))
+	{
+		CString strErr;
+		strErr.Format(L"Ошибка сохранения конфигурации!");
+		AfxMessageBox(strErr, MB_OK | MB_ICONERROR);
+	}
+	else {
+		CString strOk;
+		strOk.Format(L"Конфигурация сохранена в реестр.");
+		AfxMessageBox(strOk, MB_OK | MB_ICONINFORMATION);
+	}
 }
 
 // Кнопка сохранения конфигурации
@@ -923,6 +961,8 @@ void CRadiosignalDlg::OnBnClickedButton2()
 // Кнопка сброса конфигурации
 void CRadiosignalDlg::OnBnClickedButton3()
 {
+	if (AfxMessageBox(L"Вы действительно хотите сбросить конфигурацию?", MB_ICONEXCLAMATION | MB_OKCANCEL) == IDCANCEL) return;
+
 	AfxGetApp()->DelRegTree(HKEY_CURRENT_USER, _T("SOFTWARE\\russkiylis\\Radiosignal\\Settings"));  // Удаление реестра
 	IsRestart = true; // Нам нужен рестарт
 	this->SendMessage(WM_CLOSE);  // Вызов функции закрытия
