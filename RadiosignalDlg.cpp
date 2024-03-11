@@ -573,7 +573,6 @@ void CRadiosignalDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
 	Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF.Invalidate();  // Перерисовывание графика ДПФ
-	RegistrySave();
 
 	*pResult = 0;
 }
