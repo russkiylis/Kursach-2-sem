@@ -68,8 +68,8 @@ END_MESSAGE_MAP()
 CRadiosignalDlg::CRadiosignalDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_KURSACH_DIALOG, pParent)
 	, N(500)
-	, F(2000000)
-	, Fm(400000)
+	, F(2000)
+	, Fm(400)
 	, M(5)
 	, SignalGraph_YScale(50000)
 	, SignalGraph_XScale(5)
@@ -92,15 +92,15 @@ void CRadiosignalDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, ID_N_SPIN, N_Spin);
 	DDX_Text(pDX, ID_N_EDIT, N);
-	DDV_MinMaxInt(pDX, N, 100, 1000);
+	DDV_MinMaxDouble(pDX, N, 100, 1000);
 	DDX_Control(pDX, ID_N_EDIT, N_Edit);
 	DDX_Control(pDX, ID_F_SPIN, F_Spin);
 	DDX_Control(pDX, ID_F_EDIT, F_Edit);
 	DDX_Text(pDX, ID_F_EDIT, F);
-	DDV_MinMaxInt(pDX, F, 1000000, 4000000);
+	DDV_MinMaxDouble(pDX, F, 1000, 4000);
 	DDX_Control(pDX, ID_Fm_EDIT, Fm_Edit);
 	DDX_Text(pDX, ID_Fm_EDIT, Fm);
-	DDV_MinMaxInt(pDX, Fm, 100000, 900000);
+	DDV_MinMaxDouble(pDX, Fm, 100, 900);
 	DDX_Control(pDX, ID_Fm_SPIN, Fm_Spin);
 	DDX_Control(pDX, ID_M_EDIT, M_Edit);
 	DDX_Text(pDX, ID_M_EDIT, M);
@@ -224,12 +224,12 @@ BOOL CRadiosignalDlg::OnInitDialog()
 	// Инициализация переменных
 	N = AfxGetApp()->GetProfileInt(L"Settings", L"N", 500);
 	N_Edit.SetWindowTextW(converter.intToCString(N));
-	F = AfxGetApp()->GetProfileInt(L"Settings", L"F", 2000000);
-	F_Edit.SetWindowTextW(converter.doubleToCString_3(F));
-	Fm = AfxGetApp()->GetProfileInt(L"Settings", L"Fm", 400000);;
-	Fm_Edit.SetWindowTextW(converter.doubleToCString_3(Fm));
+	F = AfxGetApp()->GetProfileInt(L"Settings", L"F", 2000);
+	F_Edit.SetWindowTextW(converter.doubleToCString(F));
+	Fm = AfxGetApp()->GetProfileInt(L"Settings", L"Fm", 400);;
+	Fm_Edit.SetWindowTextW(converter.doubleToCString(Fm));
 	M = AfxGetApp()->GetProfileInt(L"Settings", L"M", 5);
-	M_Edit.SetWindowTextW(converter.doubleToCString_3(M));
+	M_Edit.SetWindowTextW(converter.doubleToCString(M));
 
 	DPFGraph_IsLog = AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_IsLog", 0);
 	DPFGraph_LogControl.SetCheck(AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_IsLog", 0));
@@ -300,8 +300,8 @@ BOOL CRadiosignalDlg::OnInitDialog()
 
 	// Передача в класс построения графика сигнала
 	Signal.N = N;
-	Signal.F = F;
-	Signal.Fm = Fm;
+	Signal.F = F*1000;
+	Signal.Fm = Fm*1000;
 	Signal.M = M;
 	Signal.XScale = SignalGraph_XScale;
 	Signal.YScale = SignalGraph_YScale;
@@ -315,8 +315,8 @@ BOOL CRadiosignalDlg::OnInitDialog()
 
 	// Передача в класс построения графика ДПФ
 	DPF.N = N;
-	DPF.F = F;
-	DPF.Fm = Fm;
+	DPF.F = F*1000;
+	DPF.Fm = Fm*1000;
 	DPF.M = M;
 	DPF.XScale = DPFGraph_XScale;
 	DPF.YScale = DPFGraph_YScale;
@@ -391,10 +391,10 @@ void CRadiosignalDlg::OnBnClickedOk()
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
-	data.CheckIntNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
-	data.CheckIntNumber(F, 1000000, 4000000, F_Edit);  // Возвращение F в нормальные значения, если нужно
-	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
-	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
+	data.CheckNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
+	data.CheckNumber(F, 1000, 4000, F_Edit);  // Возвращение F в нормальные значения, если нужно
+	data.CheckNumber(Fm, 100, 900, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
+	data.CheckNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
 
 	// Получение цвета
 	SGColor = SGColorControl.GetColor();
@@ -406,8 +406,8 @@ void CRadiosignalDlg::OnBnClickedOk()
 
 	// Передача в класс построения графика сигнала
 	Signal.N = N;
-	Signal.F = F;
-	Signal.Fm = Fm;
+	Signal.F = F*1000;
+	Signal.Fm = Fm*1000;
 	Signal.M = M;
 	Signal.XScale = SignalGraph_XScale;
 	Signal.YScale = SignalGraph_YScale;
@@ -419,8 +419,8 @@ void CRadiosignalDlg::OnBnClickedOk()
 
 	// Передача в класс построения графика ДПФ
 	DPF.N = N;
-	DPF.F = F;
-	DPF.Fm = Fm;
+	DPF.F = F*1000;
+	DPF.Fm = Fm*1000;
 	DPF.M = M;
 	DPF.XScale = DPFGraph_XScale;
 	DPF.YScale = DPFGraph_YScale;
@@ -443,7 +443,7 @@ void CRadiosignalDlg::OnEnKillfocusNEdit()
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
-	data.CheckIntNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
+	data.CheckNumber(N, 100, 1000, N_Edit);  // Возвращение N в нормальные значения, если нужно
 
 	Signal.N = N;  // Передача в класс построения графика сигнала
 	DPF.N = N;  // Передача в класс построения графика ДПФ
@@ -458,7 +458,7 @@ void CRadiosignalDlg::OnDeltaposNSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	Lib_InteractiveBoxesData data;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
-	data.IntSpinChange(N, 100, 1000, N_Edit, pNMUpDown->iDelta);  // Изменение N
+	data.SpinChange(N, 100, 1000, N_Edit, pNMUpDown->iDelta);  // Изменение N
 
 	Signal.N = N;  // Передача в класс построения графика сигнала
 	DPF.N = N;  // Передача в класс построения графика ДПФ
@@ -478,10 +478,10 @@ void CRadiosignalDlg::OnEnKillfocusFEdit()
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
-	data.CheckIntNumber(F, 1000000, 4000000, F_Edit);  // Возвращение F в нормальные значения, если нужно
+	data.CheckNumber(F, 1000, 4000, F_Edit);  // Возвращение F в нормальные значения, если нужно
 
-	Signal.F = F;  // Передача в класс построения графика сигнала
-	DPF.F = F;  // Передача в класс построения графика ДПФ
+	Signal.F = F*1000;  // Передача в класс построения графика сигнала
+	DPF.F = F*1000;  // Передача в класс построения графика ДПФ
 
 	Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF.Invalidate();  // Перерисовывание графика ДПФ
@@ -493,10 +493,10 @@ void CRadiosignalDlg::OnDeltaposFSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	Lib_InteractiveBoxesData data;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
-	data.IntSpinChange(F, 1000000, 4000000, F_Edit, pNMUpDown->iDelta, 5000);  // Изменение F
+	data.SpinChange(F, 1000, 4000, F_Edit, pNMUpDown->iDelta, 0.5);  // Изменение F
 
-	Signal.F = F;  // Передача в класс построения графика сигнала
-	DPF.F = F;  // Передача в класс построения графика ДПФ
+	Signal.F = F*1000;  // Передача в класс построения графика сигнала
+	DPF.F = F*1000;  // Передача в класс построения графика ДПФ
 
 	Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF.Invalidate();  // Перерисовывание графика ДПФ
@@ -514,10 +514,10 @@ void CRadiosignalDlg::OnEnKillfocusFmEdit()
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
-	data.CheckIntNumber(Fm, 100000, 900000, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
+	data.CheckNumber(Fm, 100, 900, Fm_Edit);  // Возвращение Fm в нормальные значения, если нужно
 
-	Signal.Fm = Fm;  // Передача в класс построения графика сигнала
-	DPF.Fm = Fm;  // Передача в класс построения графика ДПФ
+	Signal.Fm = Fm*1000;  // Передача в класс построения графика сигнала
+	DPF.Fm = Fm*1000;  // Передача в класс построения графика ДПФ
 
 	Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF.Invalidate();  // Перерисовывание графика ДПФ
@@ -529,10 +529,10 @@ void CRadiosignalDlg::OnDeltaposFmSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	Lib_InteractiveBoxesData data;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
-	data.IntSpinChange(Fm, 100000, 900000, Fm_Edit, pNMUpDown->iDelta, 1000);  // Изменение Fm
+	data.SpinChange(Fm, 100, 900, Fm_Edit, pNMUpDown->iDelta, 0.1);  // Изменение Fm
 
-	Signal.Fm = Fm;  // Передача в класс построения графика сигнала
-	DPF.Fm = Fm;  // Передача в класс построения графика ДПФ
+	Signal.Fm = Fm*1000;  // Передача в класс построения графика сигнала
+	DPF.Fm = Fm*1000;  // Передача в класс построения графика ДПФ
 
 	Signal.Invalidate();  // Перерисовывание графика сигнала
 	DPF.Invalidate();  // Перерисовывание графика ДПФ
@@ -550,7 +550,7 @@ void CRadiosignalDlg::OnEnKillfocusMEdit()
 	Lib_InteractiveBoxesData data;
 
 	UpdateData();  // Обновление информации
-	data.CheckIntNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
+	data.CheckNumber(M, 0, 10, M_Edit);  // Возвращение M в нормальные значения, если нужно
 
 	Signal.M = M;  // Передача в класс построения графика сигнала
 	DPF.M = M;  // Передача в класс построения графика ДПФ
@@ -566,7 +566,7 @@ void CRadiosignalDlg::OnDeltaposMSpin(NMHDR* pNMHDR, LRESULT* pResult)
 	Lib_InteractiveBoxesData data;
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 
-	data.IntSpinChange(M, 0, 10, M_Edit, pNMUpDown->iDelta);  // Изменение M
+	data.SpinChange(M, 0, 10, M_Edit, pNMUpDown->iDelta, 0.01);  // Изменение M
 
 	Signal.M = M;  // Передача в класс построения графика сигнала
 	DPF.M = M;  // Передача в класс построения графика ДПФ

@@ -8,12 +8,12 @@
 DEFINE_GUID(ImageFormatBMP, 0xb96b3cab, 0x0728, 0x11d3, 0x9d, 0x7b,
 	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
 
-CString Lib_ValueConverter::doubleToCString_3(double& number)
+CString Lib_ValueConverter::doubleToCString(double& number)
 {
-	CString str;
-	str.Format(_T("%.3f"), number);  // —обственно конвертаци€
+		CString str;
+		str.Format(_T("%g"), number);  // —обственно конвертаци€
 
-	return str;
+		return str;
 }
 
 CString Lib_ValueConverter::intToCString(int& number)
@@ -24,7 +24,7 @@ CString Lib_ValueConverter::intToCString(int& number)
 	return str;
 }
 
-void Lib_InteractiveBoxesData::IntSpinChange(int& number, int smallest, int largest, CEdit& editBox, int &delta)
+void Lib_InteractiveBoxesData::SpinChange(int& number, int smallest, int largest, CEdit& editBox, int &delta)
 {
 	number -= delta;  // »зменение номера в соотвествии с размером дельты (шага изменени€)
 
@@ -38,7 +38,7 @@ void Lib_InteractiveBoxesData::IntSpinChange(int& number, int smallest, int larg
 	editBox.SetWindowTextW(intToCString(number));  // «адание нового значени€ в editBox
 }
 
-void Lib_InteractiveBoxesData::IntSpinChange(int& number, int smallest, int largest, CEdit& editBox, int& delta, int multiplier)
+void Lib_InteractiveBoxesData::SpinChange(int& number, int smallest, int largest, CEdit& editBox, int& delta, int multiplier)
 {
 	number -= delta*multiplier; // »зменение номера в соотвествии с размером дельты (шага изменени€)
 
@@ -52,7 +52,35 @@ void Lib_InteractiveBoxesData::IntSpinChange(int& number, int smallest, int larg
 	editBox.SetWindowTextW(intToCString(number));  // «адание нового значени€ в editBox
 }
 
-void Lib_InteractiveBoxesData::CheckIntNumber(int& number, int smallest, int largest, CEdit& editBox)
+void Lib_InteractiveBoxesData::SpinChange(double& number, double smallest, double largest, CEdit& editBox, int& delta)
+{
+	number -= delta;  // »зменение номера в соотвествии с размером дельты (шага изменени€)
+
+	if (number < smallest) {  // ≈сли число меньше самого маленького доступного, то число становитс€ самым маленьким доступным
+		number = smallest;
+	}
+	else if (number > largest) {  // ≈сли число больше самого большого доступного, то число становитс€ самым большим доступным
+		number = largest;
+	}
+
+	editBox.SetWindowTextW(doubleToCString(number));  // «адание нового значени€ в editBox
+}
+
+void Lib_InteractiveBoxesData::SpinChange(double& number, double smallest, double largest, CEdit& editBox, int& delta, double multiplier)
+{
+	number -= delta * multiplier; // »зменение номера в соотвествии с размером дельты (шага изменени€)
+
+	if (number < smallest) {  // ≈сли число меньше самого маленького доступного, то число становитс€ самым маленьким доступным
+		number = smallest;
+	}
+	else if (number > largest) {  // ≈сли число больше самого большого доступного, то число становитс€ самым большим доступным
+		number = largest;
+	}
+
+	editBox.SetWindowTextW(doubleToCString(number));  // «адание нового значени€ в editBox
+}
+
+void Lib_InteractiveBoxesData::CheckNumber(int& number, int smallest, int largest, CEdit& editBox)
 {
 	if (number < smallest) {  // ¬озвращение номера в минимальное значение
 		number = smallest;
@@ -64,7 +92,7 @@ void Lib_InteractiveBoxesData::CheckIntNumber(int& number, int smallest, int lar
 	editBox.SetWindowTextW(intToCString(number));  // «адание нового значени€ в editBox
 }
 
-void Lib_InteractiveBoxesData::CheckDoubleNumber(double& number, double smallest, double largest, CEdit& editBox)
+void Lib_InteractiveBoxesData::CheckNumber(double& number, double smallest, double largest, CEdit& editBox)
 {
 	if (number < smallest) {  // ¬озвращение номера в минимальное значение
 		number = smallest;
@@ -73,7 +101,7 @@ void Lib_InteractiveBoxesData::CheckDoubleNumber(double& number, double smallest
 		number = largest;
 	}
 
-	editBox.SetWindowTextW(doubleToCString_3(number));  // «адание нового значени€ в editBox
+	editBox.SetWindowTextW(doubleToCString(number));  // «адание нового значени€ в editBox
 }
 
 Lib_dXY Lib_PointCalculation::SignalCalculation(double& x)
@@ -183,7 +211,7 @@ void Lib_GraphConverter::GenerateYCoordLines(CRect& rc, std::vector<Lib_CoordLin
 			for (double i = rc.Height(); i > 0; i -= double(YDensity) * double(YScale) / 30) {
 				Lib_CoordLine cl;
 				cl.coord = i;
-				cl.value.Format(_T("%.2f"), -(i - rc.Height()) / YScale*30/N);
+				cl.value.Format(_T("%.2f"), -(i - rc.Height()) / YScale*30);
 				if (cl.value == L"-0.00") cl.value = L"";
 				vec.push_back(cl);
 			}
@@ -194,7 +222,7 @@ void Lib_GraphConverter::GenerateYCoordLines(CRect& rc, std::vector<Lib_CoordLin
 				cl.coord = i;
 
 				double k = -(i - rc.Height()) / (double)YScale;
-				cl.value.Format(_T("%.2f"), pow(double(10), k)/N);
+				cl.value.Format(_T("%.2f"), pow(double(10), k));
 				if (cl.value == L"-0.00") cl.value = L"";
 				vec.push_back(cl);
 			}

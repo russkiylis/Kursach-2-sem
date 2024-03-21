@@ -31,8 +31,9 @@ public:
 // Класс, в котором содержатся функции конвертации значений
 class Lib_ValueConverter {
 public:
-	// Конвертация float в CString c 2 знаками после запятой
-	CString doubleToCString_3(double &number);
+	// Конвертация float в CString
+	CString doubleToCString(double& number);
+
 
 	// Конвертация int в CString
 	CString intToCString(int& number);
@@ -43,17 +44,20 @@ class Lib_InteractiveBoxesData : Lib_ValueConverter {
 public:
 
 	// Работа спинов со значением int (с ограничением с двух сторон)
-	void IntSpinChange(int& number, int smallest, int largest, CEdit& editBox, int& delta);
+	void SpinChange(int& number, int smallest, int largest, CEdit& editBox, int& delta);
 	// Работа спинов со значением int (с ограничением с двух сторон и мультипликатором дельты)
-	void IntSpinChange(int& number, int smallest, int largest, CEdit& editBox, int& delta, int multiplier);
+	void SpinChange(int& number, int smallest, int largest, CEdit& editBox, int& delta, int multiplier);
 
+	// Работа спинов со значением double (с ограничением с двух сторон)
+	void SpinChange(double& number, double smallest, double largest, CEdit& editBox, int& delta);
+	// Работа спинов со значением double (с ограничением с двух сторон и мультипликатором дельты)
+	void SpinChange(double& number, double smallest, double largest, CEdit& editBox, int& delta, double multiplier);
 
 
 	// Проверка значения int и его возвращение
-	void CheckIntNumber(int& number, int smallest, int largest, CEdit& editBox);
-
+	void CheckNumber(int& number, int smallest, int largest, CEdit& editBox);
 	// Проверка значения double и его возвращение
-	void CheckDoubleNumber(double& number, double smallest, double largest, CEdit& editBox);
+	void CheckNumber(double& number, double smallest, double largest, CEdit& editBox);
 };
 
 // Класс вычислений точек графиков
