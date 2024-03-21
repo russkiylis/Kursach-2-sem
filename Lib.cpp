@@ -11,7 +11,7 @@ DEFINE_GUID(ImageFormatBMP, 0xb96b3cab, 0x0728, 0x11d3, 0x9d, 0x7b,
 CString Lib_ValueConverter::doubleToCString(double& number)
 {
 		CString str;
-		str.Format(_T("%g"), number);  // Собственно конвертация
+		str.Format(_T("%.15g"), number);  // Собственно конвертация
 
 		return str;
 }
@@ -118,13 +118,20 @@ CPoint Lib_GraphConverter::GenerateDrawablePoint(CRect& rc, Lib_dXY& calculatedP
 	double x = x0 + calculatedPoint.x * XScale*100000;  // Перемещение х графика в центр + масштабирование
 	double y;
 
-	if (isLog) {
-		y = y0-log10(calculatedPoint.y) * YScale;  // Перемещение y графика в центр + масштабирование (логарифм)
-		//if (y>rc.Height()) y -= (y - rc.Height());
+	if (IsDPF) {
+		if (isLog) {
+			y = y0 - log10(calculatedPoint.y * 500) * YScale;  // Перемещение y графика в центр + масштабирование (логарифм)
+			//if (y>rc.Height()) y -= (y - rc.Height());
+		}
+		else {
+			y = y0 - calculatedPoint.y * YScale / 30 * 500;  // Перемещение y графика в центр + масштабирование
+		}
 	}
 	else {
-		y = y0 - calculatedPoint.y * YScale/30;  // Перемещение y графика в центр + масштабирование
+		y = y0 - calculatedPoint.y * YScale / 30;  // Перемещение y графика в центр + масштабирование
 	}
+
+
 
 	return CPoint(x,y);
 }
@@ -148,8 +155,8 @@ void Lib_GraphConverter::GenerateGraphPoints(CRect& rc, std::vector<CPoint>& vec
 				double x = double(g) / 10000000;  // Целочисленное значение i делится на 10^7 так как по условию частота подсчёта графика 10 МГц
 				Lib_dXY calc = SignalCalculation(x);  // Считаем точку
 
-				sin_sum += calc.y * sin((-2 * M_PI * i * g) / N);  // Подсчёт синусной составляющей Хк
-				cos_sum += calc.y * cos((-2 * M_PI * i * g) / N);  // Подсчёт косинусной составляющей Хк
+				sin_sum += calc.y * sin((-2 * M_PI * i * g) / N)/N;  // Подсчёт синусной составляющей Хк
+				cos_sum += calc.y * cos((-2 * M_PI * i * g) / N)/N;  // Подсчёт косинусной составляющей Хк
 
 			}
 
@@ -211,7 +218,7 @@ void Lib_GraphConverter::GenerateYCoordLines(CRect& rc, std::vector<Lib_CoordLin
 			for (double i = rc.Height(); i > 0; i -= double(YDensity) * double(YScale) / 30) {
 				Lib_CoordLine cl;
 				cl.coord = i;
-				cl.value.Format(_T("%.2f"), -(i - rc.Height()) / YScale*30);
+				cl.value.Format(_T("%.2f"), -(i - rc.Height()) / YScale*30/500);
 				if (cl.value == L"-0.00") cl.value = L"";
 				vec.push_back(cl);
 			}
@@ -222,7 +229,7 @@ void Lib_GraphConverter::GenerateYCoordLines(CRect& rc, std::vector<Lib_CoordLin
 				cl.coord = i;
 
 				double k = -(i - rc.Height()) / (double)YScale;
-				cl.value.Format(_T("%.2f"), pow(double(10), k));
+				cl.value.Format(_T("%.2f"), pow(double(10), k)/500);
 				if (cl.value == L"-0.00") cl.value = L"";
 				vec.push_back(cl);
 			}

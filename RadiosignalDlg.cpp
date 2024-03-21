@@ -92,7 +92,7 @@ void CRadiosignalDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, ID_N_SPIN, N_Spin);
 	DDX_Text(pDX, ID_N_EDIT, N);
-	DDV_MinMaxDouble(pDX, N, 100, 1000);
+	DDV_MinMaxInt(pDX, N, 100, 1000);
 	DDX_Control(pDX, ID_N_EDIT, N_Edit);
 	DDX_Control(pDX, ID_F_SPIN, F_Spin);
 	DDX_Control(pDX, ID_F_EDIT, F_Edit);
@@ -104,7 +104,7 @@ void CRadiosignalDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, ID_Fm_SPIN, Fm_Spin);
 	DDX_Control(pDX, ID_M_EDIT, M_Edit);
 	DDX_Text(pDX, ID_M_EDIT, M);
-	DDV_MinMaxInt(pDX, M, 0, 10);
+	DDV_MinMaxDouble(pDX, M, 0, 10);
 	DDX_Control(pDX, ID_M_SPIN, M_Spin);
 	DDX_Slider(pDX, ID_SIGNALGRAPH_YCONTROL, SignalGraph_YScale);
 	DDX_Control(pDX, ID_SIGNALGRAPH_YCONTROL, SignalGraph_YControl);
@@ -224,11 +224,11 @@ BOOL CRadiosignalDlg::OnInitDialog()
 	// Инициализация переменных
 	N = AfxGetApp()->GetProfileInt(L"Settings", L"N", 500);
 	N_Edit.SetWindowTextW(converter.intToCString(N));
-	F = AfxGetApp()->GetProfileInt(L"Settings", L"F", 2000);
+	F = _wtof(AfxGetApp()->GetProfileStringW(L"Settings", L"F", L"2000"));
 	F_Edit.SetWindowTextW(converter.doubleToCString(F));
-	Fm = AfxGetApp()->GetProfileInt(L"Settings", L"Fm", 400);;
+	Fm = _wtof(AfxGetApp()->GetProfileStringW(L"Settings", L"Fm", L"400"));
 	Fm_Edit.SetWindowTextW(converter.doubleToCString(Fm));
-	M = AfxGetApp()->GetProfileInt(L"Settings", L"M", 5);
+	M = _wtof(AfxGetApp()->GetProfileStringW(L"Settings", L"M", L"5"));
 	M_Edit.SetWindowTextW(converter.doubleToCString(M));
 
 	DPFGraph_IsLog = AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_IsLog", 0);
@@ -281,7 +281,7 @@ BOOL CRadiosignalDlg::OnInitDialog()
 
 	// Ползунок плотности координат ДПФ y
 	DYDensity = AfxGetApp()->GetProfileInt(L"Settings", L"DYDensity", 25);
-	DYDensityControl.SetRange(25, 50);
+	DYDensityControl.SetRange(10, 50);
 	DYDensityControl.SetPos(AfxGetApp()->GetProfileInt(L"Settings", L"DYDensity", 25));
 
 	// Начальное задание цвета
@@ -898,6 +898,7 @@ void CRadiosignalDlg::OnNMCustomdrawSlider6(NMHDR* pNMHDR, LRESULT* pResult)
 void CRadiosignalDlg::RegistrySave()
 {
 	HRESULT hr;
+	Lib_ValueConverter c;
 	// Обновление информации
 	UpdateData();
 
@@ -919,9 +920,9 @@ void CRadiosignalDlg::RegistrySave()
 
 	// Внесение переменных в реестр
 	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("N"), N);
-	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("F"), F);
-	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("Fm"), Fm);
-	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("M"), M);
+	hr = AfxGetApp()->WriteProfileStringW(_T("Settings"), _T("F"), c.doubleToCString(F));
+	hr = AfxGetApp()->WriteProfileStringW(_T("Settings"), _T("Fm"), c.doubleToCString(Fm));
+	hr = AfxGetApp()->WriteProfileStringW(_T("Settings"), _T("M"), c.doubleToCString(M));
 
 	// Внесение масштаба и состояния логарифма в реестр
 	hr = AfxGetApp()->WriteProfileInt(_T("Settings"), _T("SignalGraph_XScale"), SignalGraph_XScale);
