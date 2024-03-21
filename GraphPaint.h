@@ -11,9 +11,9 @@ public:
 
     int N;
     int G;
-    int F;
-    int Fm;
-    int M;
+    double F;
+    double Fm;
+    double M;
     int XScale;
     int YScale;
     bool IsLog;

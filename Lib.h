@@ -32,7 +32,7 @@ public:
 class Lib_ValueConverter {
 public:
 	// Конвертация float в CString c 2 знаками после запятой
-	CString floatToCString_2(float &number);
+	CString doubleToCString_3(double &number);
 
 	// Конвертация int в CString
 	CString intToCString(int& number);
@@ -47,9 +47,13 @@ public:
 	// Работа спинов со значением int (с ограничением с двух сторон и мультипликатором дельты)
 	void IntSpinChange(int& number, int smallest, int largest, CEdit& editBox, int& delta, int multiplier);
 
+
+
 	// Проверка значения int и его возвращение
 	void CheckIntNumber(int& number, int smallest, int largest, CEdit& editBox);
 
+	// Проверка значения double и его возвращение
+	void CheckDoubleNumber(double& number, double smallest, double largest, CEdit& editBox);
 };
 
 // Класс вычислений точек графиков
@@ -61,9 +65,9 @@ public:
 	// Переменные
 
 	int N;
-	int F;
-	int Fm;
-	int M;
+	double F;
+	double Fm;
+	double M;
 };
 
 // Класс генерации точек графиков

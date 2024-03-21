@@ -225,11 +225,11 @@ BOOL CRadiosignalDlg::OnInitDialog()
 	N = AfxGetApp()->GetProfileInt(L"Settings", L"N", 500);
 	N_Edit.SetWindowTextW(converter.intToCString(N));
 	F = AfxGetApp()->GetProfileInt(L"Settings", L"F", 2000000);
-	F_Edit.SetWindowTextW(converter.intToCString(F));
+	F_Edit.SetWindowTextW(converter.doubleToCString_3(F));
 	Fm = AfxGetApp()->GetProfileInt(L"Settings", L"Fm", 400000);;
-	Fm_Edit.SetWindowTextW(converter.intToCString(Fm));
+	Fm_Edit.SetWindowTextW(converter.doubleToCString_3(Fm));
 	M = AfxGetApp()->GetProfileInt(L"Settings", L"M", 5);
-	M_Edit.SetWindowTextW(converter.intToCString(M));
+	M_Edit.SetWindowTextW(converter.doubleToCString_3(M));
 
 	DPFGraph_IsLog = AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_IsLog", 0);
 	DPFGraph_LogControl.SetCheck(AfxGetApp()->GetProfileInt(L"Settings", L"DPFGraph_IsLog", 0));

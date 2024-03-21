@@ -47,7 +47,7 @@ public:
 	// Переменная окошка выбора F
 	CEdit F_Edit;
 	// Переменная F (Несущая частота сигнала)
-	int F;
+	double F;
 
 	afx_msg void OnEnKillfocusNEdit();
 	afx_msg void OnEnKillfocusFEdit();
@@ -56,7 +56,7 @@ public:
 	// Переменная окошка выбора Fm
 	CEdit Fm_Edit;
 	// Переменная Fm (Частота модуляции)
-	int Fm;
+	double Fm;
 	// Переменная стрелочек задания Fm
 	CSpinButtonCtrl Fm_Spin;
 
@@ -66,7 +66,7 @@ public:
 	// Переменная окошка выбора M
 	CEdit M_Edit;
 	// Переменная M (Глубина модуляции)
-	int M;
+	double M;
 	// Переменная стрелочек задания M
 	CSpinButtonCtrl M_Spin;
 

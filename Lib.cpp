@@ -8,10 +8,10 @@
 DEFINE_GUID(ImageFormatBMP, 0xb96b3cab, 0x0728, 0x11d3, 0x9d, 0x7b,
 	0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e);
 
-CString Lib_ValueConverter::floatToCString_2(float& number)
+CString Lib_ValueConverter::doubleToCString_3(double& number)
 {
 	CString str;
-	str.Format(_T("%.2f"), number);  // Собственно конвертация
+	str.Format(_T("%.3f"), number);  // Собственно конвертация
 
 	return str;
 }
@@ -62,6 +62,18 @@ void Lib_InteractiveBoxesData::CheckIntNumber(int& number, int smallest, int lar
 	}
 
 	editBox.SetWindowTextW(intToCString(number));  // Задание нового значения в editBox
+}
+
+void Lib_InteractiveBoxesData::CheckDoubleNumber(double& number, double smallest, double largest, CEdit& editBox)
+{
+	if (number < smallest) {  // Возвращение номера в минимальное значение
+		number = smallest;
+	}
+	else if (number > largest) {  // Возвращение номера в минимальное значение
+		number = largest;
+	}
+
+	editBox.SetWindowTextW(doubleToCString_3(number));  // Задание нового значения в editBox
 }
 
 Lib_dXY Lib_PointCalculation::SignalCalculation(double& x)
@@ -171,7 +183,7 @@ void Lib_GraphConverter::GenerateYCoordLines(CRect& rc, std::vector<Lib_CoordLin
 			for (double i = rc.Height(); i > 0; i -= double(YDensity) * double(YScale) / 30) {
 				Lib_CoordLine cl;
 				cl.coord = i;
-				cl.value.Format(_T("%.2f"), -(i - rc.Height()) / YScale*30);
+				cl.value.Format(_T("%.2f"), -(i - rc.Height()) / YScale*30/N);
 				if (cl.value == L"-0.00") cl.value = L"";
 				vec.push_back(cl);
 			}
@@ -182,7 +194,7 @@ void Lib_GraphConverter::GenerateYCoordLines(CRect& rc, std::vector<Lib_CoordLin
 				cl.coord = i;
 
 				double k = -(i - rc.Height()) / (double)YScale;
-				cl.value.Format(_T("%.2f"), pow(double(10), k));
+				cl.value.Format(_T("%.2f"), pow(double(10), k)/N);
 				if (cl.value == L"-0.00") cl.value = L"";
 				vec.push_back(cl);
 			}
